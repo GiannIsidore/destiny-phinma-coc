@@ -59,12 +59,12 @@ class HawakKamay
       $stmt->bindParam(':suffix', $data['suffix'], PDO::PARAM_STR);
       $stmt->bindParam(':caption', $data['caption'], PDO::PARAM_STR);
       $stmt->bindParam(':month', $data['month'], PDO::PARAM_STR);
-      $stmt->bindParam(':course', $data['course'], PDO::PARAM_INT);
+      $stmt->bindParam(':course', $data['course'], PDO::PARAM_STR);
       $stmt->bindParam(':img_id', $imgId, PDO::PARAM_INT);
       $stmt->execute();
 
       $this->conn->commit();
-      return ['status' => 'success', 'message' => 'Housekeeper added successfully'];
+      return ['status' => 'success', 'message' => 'Scholar added successfully'];
     } catch (PDOException $e) {
       $this->conn->rollBack();
       return ['status' => 'error', 'message' => $e->getMessage()];
@@ -99,7 +99,7 @@ class HawakKamay
       $stmt->bindParam(':suffix', $data['suffix'], PDO::PARAM_STR);
       $stmt->bindParam(':caption', $data['caption'], PDO::PARAM_STR);
       $stmt->bindParam(':month', $data['month'], PDO::PARAM_STR);
-      $stmt->bindParam(':course', $data['course'], PDO::PARAM_INT);
+      $stmt->bindParam(':course', $data['course'], PDO::PARAM_STR);
       $stmt->bindParam(':id', $data['id'], PDO::PARAM_INT);
       $stmt->execute();
 
@@ -144,6 +144,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 }
 
 $hk = new HawakKamay($conn);
+
 
 switch ($operation) {
   case 'getHK':

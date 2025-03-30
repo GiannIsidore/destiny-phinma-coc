@@ -19,7 +19,7 @@ const FeaturedBooks = () => {
       const response = await booksAPI.getBooks()
       if (response.data.status === 'success') {
         // Log the raw image data to debug
-        console.log('Raw book_img:', response.data.data[0].book_img)
+        // console.log('Raw book_img:', response.data.data[0].book_img)
         setBooks(response.data.data)
       } else {
         throw new Error(response.data.message)

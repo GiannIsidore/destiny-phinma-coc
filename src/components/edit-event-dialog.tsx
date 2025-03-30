@@ -9,13 +9,14 @@ import { Textarea } from "./ui/textarea"
 import { Pencil, Loader2 } from "lucide-react"
 import { toast } from 'react-toastify'
 
-import { eventsAPI } from "../services/api"
 import type { EventData } from "../services/api"
 
 interface EditEventDialogProps {
   event: EventData
   onSuccess: () => void
 }
+
+const API_URL = 'http://localhost/destiny-phinma-coc/api';
 
 export function EditEventDialog({ event, onSuccess }: EditEventDialogProps) {
   const [open, setOpen] = useState(false)
@@ -24,7 +25,7 @@ export function EditEventDialog({ event, onSuccess }: EditEventDialogProps) {
   const [desc, setDesc] = useState(event.descrip)
   const [link, setLink] = useState(event.link)
   const [image, setImage] = useState<File | null>(null)
-  const [imagePreview, setImagePreview] = useState(`data:image/${typeof event.event_image === 'string' && event.event_image.substring(0, 4) === 'R0lG' ? 'gif' : 'jpeg'};base64,${event.event_image}`)
+  const [imagePreview, setImagePreview] = useState(`data:image/jpeg;base64,${event.event_image}`)
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -39,25 +40,55 @@ export function EditEventDialog({ event, onSuccess }: EditEventDialogProps) {
     setLoading(true)
 
     try {
-      const eventData: EventData = {
+      // Create form data
+      const formData = new FormData()
+
+      // Base64 conversion for image if a new one is selected
+      let base64Image = ''
+      if (image) {
+        const reader = new FileReader()
+        base64Image = await new Promise((resolve, reject) => {
+          reader.onload = () => {
+            try {
+              const base64String = reader.result as string
+              resolve(base64String.split(',')[1]) // Remove data:image/jpeg;base64, prefix
+            } catch (error) {
+              reject(error)
+            }
+          }
+          reader.onerror = () => reject(reader.error)
+          reader.readAsDataURL(image)
+        })
+      }
+
+      // Create event data object
+      const eventData = {
         id: event.id,
         title,
         descrip: desc,
         link,
         img_id: event.img_id,
+        ...(base64Image && { event_image: base64Image })
       }
 
-      if (image) {
-        eventData.event_image = image
-      }
+      // Append to formData
+      formData.append('operation', 'updateEvent')
+      formData.append('json', JSON.stringify(eventData))
 
-      const response = await eventsAPI.updateEvent(eventData)
-      if (response.data.status === 'success') {
+      // Submit using fetch
+      const response = await fetch(`${API_URL}/event.php`, {
+        method: 'POST',
+        body: formData
+      })
+
+      const result = await response.json()
+
+      if (result.status === 'success') {
         toast.success("Event updated successfully")
         setOpen(false)
         onSuccess()
       } else {
-        throw new Error(response.data.message)
+        throw new Error(result.message || 'Server error')
       }
     } catch (error) {
       console.error('Error updating event:', error)
@@ -119,6 +150,10 @@ export function EditEventDialog({ event, onSuccess }: EditEventDialogProps) {
                   src={imagePreview}
                   alt={title}
                   className="object-cover"
+                  onError={(e) => {
+                    console.error('Image failed to load:', e);
+                    (e.target as HTMLImageElement).src = '/placeholder.jpg';
+                  }}
                 />
               </div>
               <Input

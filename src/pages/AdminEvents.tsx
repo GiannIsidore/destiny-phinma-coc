@@ -6,7 +6,6 @@ import { Input } from '../components/ui/input'
 import { Textarea } from '../components/ui/textarea'
 import { Trash2, Upload } from 'lucide-react'
 import { toast } from 'react-toastify'
-import axios from 'axios'
 import { EditEventDialog } from '../components/edit-event-dialog'
 import type { EventData } from '../services/api'
 
@@ -31,18 +30,33 @@ const EventsAdmin = () => {
   const [submitting, setSubmitting] = useState(false)
 
   const fetchEvents = useCallback(async () => {
+    console.log('Fetching events...')
     try {
-      const response = await axios.get(`${API_URL}/event.php?operation=getEvents`)
-      if (response.data.status === 'success') {
-        setEvents(response.data.data)
+      const response = await fetch(`${API_URL}/event.php?operation=getEvents`)
+      const data = await response.json()
+
+      if (data.status === 'success') {
+        console.log(`Fetched ${data.data.length} events`)
+        setEvents(data.data)
       } else {
-        throw new Error(response.data.message)
+        throw new Error(data.message)
       }
     } catch (error) {
       console.error('Error fetching events:', error)
       toast.error("Failed to fetch events")
     } finally {
       setLoading(false)
+    }
+  }, [])
+
+  // Add a helper function to check if base64 is valid
+  const isValidBase64 = useCallback((str: string | undefined) => {
+    if (!str) return false
+    try {
+      // Simple check for valid base64 characters
+      return /^[A-Za-z0-9+/=]+$/.test(str) && str.length > 100;
+    } catch {
+      return false
     }
   }, [])
 
@@ -92,34 +106,54 @@ const EventsAdmin = () => {
 
     setSubmitting(true)
     try {
+      // Create form data
       const formData = new FormData()
-      formData.append('operation', editingEvent ? 'updateEvent' : 'addEvent')
 
+      // Base64 conversion like in book-form.tsx
+      let base64Image = ''
+      if (file) {
+        const reader = new FileReader()
+        base64Image = await new Promise((resolve, reject) => {
+          reader.onload = () => {
+            try {
+              const base64String = reader.result as string
+              resolve(base64String.split(',')[1]) // Remove data:image/jpeg;base64, prefix
+            } catch (error) {
+              reject(error)
+            }
+          }
+          reader.onerror = () => reject(reader.error)
+          reader.readAsDataURL(file)
+        })
+      }
+
+      // Create event data object
       const eventData = {
         title,
         descrip: desc,
         link,
         ...(editingEvent && { id: editingEvent.id, img_id: editingEvent.img_id }),
+        ...(base64Image && { event_image: base64Image })
       }
 
-      if (file) {
-        eventData.event_image = file
-      }
-
+      // Append to formData
+      formData.append('operation', editingEvent ? 'updateEvent' : 'addEvent')
       formData.append('json', JSON.stringify(eventData))
 
-      const response = await axios.post(`${API_URL}/event.php`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
+      // Submit using fetch instead of axios
+      const response = await fetch(`${API_URL}/event.php`, {
+        method: 'POST',
+        body: formData
       })
 
-      if (response.data.status === 'success') {
+      const result = await response.json()
+
+      if (result.status === 'success') {
         toast.success(editingEvent ? "Event updated successfully!" : "Event added successfully!")
         resetForm()
         fetchEvents()
       } else {
-        throw new Error(response.data.message)
+        throw new Error(result.message || 'Server error')
       }
     } catch (error) {
       console.error('Error:', error)
@@ -133,16 +167,24 @@ const EventsAdmin = () => {
     if (!id || !window.confirm('Are you sure you want to delete this event?')) return
 
     try {
-      const response = await axios.post(`${API_URL}/event.php`, {
-        operation: 'deleteEvent',
-        json: { id }
+      // Create form data like the other API calls
+      const formData = new FormData()
+      formData.append('operation', 'deleteEvent')
+      formData.append('json', JSON.stringify({ id }))
+
+      // Use fetch instead of axios
+      const response = await fetch(`${API_URL}/event.php`, {
+        method: 'POST',
+        body: formData
       })
 
-      if (response.data.status === 'success') {
+      const result = await response.json()
+
+      if (result.status === 'success') {
         toast.success("Event deleted successfully")
         fetchEvents()
       } else {
-        throw new Error(response.data.message)
+        throw new Error(result.message || 'Server error')
       }
     } catch (error) {
       console.error('Error deleting event:', error)
@@ -265,11 +307,24 @@ const EventsAdmin = () => {
             {events.map((event) => (
               <div key={event.id} className="bg-white rounded-lg shadow-md p-4">
                 <div className="relative h-48 mb-4">
-                  <img
-                    src={`data:image/jpeg;base64,${event.event_image}`}
-                    alt={event.title}
-                    className="object-cover rounded-md w-full h-full"
-                  />
+                  {event.event_image && typeof event.event_image === 'string' && isValidBase64(event.event_image) ? (
+                    <img
+                      src={`data:image/jpeg;base64,${event.event_image}`}
+                      alt={event.title}
+                      className="object-cover w-full h-full rounded-md"
+                      onError={(e) => {
+                        // Only set placeholder once to avoid multiple requests
+                        if ((e.target as HTMLImageElement).src !== `${window.location.origin}/placeholder.jpg`) {
+                          console.error('Image failed to load for event:', event.id);
+                          (e.target as HTMLImageElement).src = '/placeholder.jpg';
+                        }
+                      }}
+                    />
+                  ) : (
+                    <div className="w-full h-full bg-gray-200 flex items-center justify-center rounded-md">
+                      <span className="text-gray-500">No image available</span>
+                    </div>
+                  )}
                 </div>
                 <h3 className="font-semibold text-lg mb-1">{event.title}</h3>
                 <p className="text-gray-500 text-sm mb-4 line-clamp-2">

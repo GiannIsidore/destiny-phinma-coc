@@ -1,7 +1,7 @@
 <?php
 include_once 'connection.php';
 header('Access-Control-Allow-Origin: *');
-header('Content-Type: application/json');
+header('Content-Type: application/json; charset=utf-8');
 header('Access-Control-Allow-Methods: POST,GET,PUT,DELETE,OPTIONS');
 header('Access-Control-Allow-Headers: Access-Control-Allow-Headers,Content-Type,Access-Control-Allow-Methods, Authorization, X-Requested-With');
 
@@ -25,7 +25,7 @@ class Event
       ");
       $events = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-      // Convert blob to base64 for each event
+      // Encode image data to base64 for each event
       foreach ($events as &$event) {
         if ($event['event_image']) {
           // Force PDO to return the raw binary data
@@ -51,7 +51,8 @@ class Event
 
       // Insert image into event_blob
       $stmt = $this->conn->prepare("INSERT INTO event_blob (event_image) VALUES (:event_image)");
-      $stmt->bindParam(':event_image', $data['event_image'], PDO::PARAM_LOB);
+      $imageData = base64_decode($data['event_image']);
+      $stmt->bindParam(':event_image', $imageData, PDO::PARAM_LOB);
       $stmt->execute();
       $imgId = $this->conn->lastInsertId();
 
@@ -82,7 +83,8 @@ class Event
       if (isset($data['event_image'])) {
         // Update image in event_blob
         $stmt = $this->conn->prepare("UPDATE event_blob SET event_image = :event_image WHERE id = :img_id");
-        $stmt->bindParam(':event_image', $data['event_image'], PDO::PARAM_LOB);
+        $imageData = base64_decode($data['event_image']);
+        $stmt->bindParam(':event_image', $imageData, PDO::PARAM_LOB);
         $stmt->bindParam(':img_id', $data['img_id'], PDO::PARAM_INT);
         $stmt->execute();
       }
