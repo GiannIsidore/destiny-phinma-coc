@@ -1,11 +1,14 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { NavDropdown } from './nav-dropdown';
 import { Menu, X } from 'lucide-react';
+import { sessionManager } from '../utils/sessionManager';
 
 export const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const navigate = useNavigate();
+  const isAdmin = sessionManager.getRole() === 'admin';
 
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!mobileMenuOpen);
@@ -39,6 +42,10 @@ export const Header = () => {
     { label: 'FAQ', href: '/faq' },
   ];
 
+  const handleLogout = () => {
+    sessionManager.clearSession();
+    navigate('/login');
+  };
 
   const headerHeight = scrolled ? '3.5rem' : '4rem';
 
@@ -76,6 +83,47 @@ export const Header = () => {
           >
             {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
           </button>
+
+          {isAdmin ? (
+            <div className="flex items-center gap-4">
+              <span className="text-sm text-gray-600">
+                Welcome, {sessionManager.getUsername()}
+              </span>
+              <button
+                onClick={handleLogout}
+                className="px-4 py-2 text-[#1a1a1a] hover:bg-gray-100 rounded transition-colors"
+              >
+                Logout
+              </button>
+            </div>
+          ) : (
+            <div className="flex items-center space-x-4">
+              <Link
+                to="/library-history"
+                className="text-gray-600 hover:text-[#1a1a1a]"
+              >
+                History
+              </Link>
+              <Link
+                to="/mission-vision"
+                className="text-gray-600 hover:text-[#1a1a1a]"
+              >
+                Mission & Vision
+              </Link>
+              <Link
+                to="/open-access"
+                className="text-gray-600 hover:text-[#1a1a1a]"
+              >
+                Open Access
+              </Link>
+              <Link
+                to="/faq"
+                className="text-gray-600 hover:text-[#1a1a1a]"
+              >
+                FAQ
+              </Link>
+            </div>
+          )}
         </div>
       </header>
 

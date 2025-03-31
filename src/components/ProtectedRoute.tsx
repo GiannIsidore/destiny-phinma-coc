@@ -1,16 +1,21 @@
-import { Navigate, useLocation } from 'react-router-dom'
+import { Navigate } from 'react-router-dom'
+import { sessionManager } from '../utils/sessionManager'
 
 interface ProtectedRouteProps {
   children: React.ReactNode
+  requiredRole?: string
 }
 
-const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
-  const location = useLocation()
-  const isAuthenticated = localStorage.getItem('isAdmin') === 'true'
+const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, requiredRole }) => {
+  const isAuthenticated = sessionManager.isAuthenticated()
+  const userRole = sessionManager.getRole()
 
   if (!isAuthenticated) {
-    // Redirect to login but save the attempted location
-    return <Navigate to="/login" state={{ from: location }} replace />
+    return <Navigate to="/login" replace />
+  }
+
+  if (requiredRole && userRole !== requiredRole) {
+    return <Navigate to="/" replace />
   }
 
   return <>{children}</>

@@ -77,22 +77,26 @@ const FAQ = () => {
               ))}
             </div>
 
-            <div className="mt-12">
+            <div className="mt-20">
               <h2 className="text-xl font-bold mb-4 text-primary">Still Have Questions?</h2>
               <p className="mb-4">
                 If you couldn't find the answer to your question, please feel free to contact us:
               </p>
               <ul className="space-y-2">
-                <li><strong>Email:</strong> library@phinmacoc.edu.ph</li>
-                <li><strong>Phone:</strong> (088) 123-4567</li>
-                <li><strong>Visit:</strong> The Reference Desk on the first floor of the library</li>
+                <li><strong>Gmail:</strong> library.coc@phinmaed.com</li>
+                <li><strong> Fb page:</strong><a href='facebook.com/PHINMACOCLibrary' className='hover:underline duration-300 transition-all hover:scale-125'> facebook.com/PHINMACOCLibrary</a></li>
+                <li><strong> Fb account:</strong><a href='facebook.com/askvirla' className='hover:underline duration-300 transition-all hover:scale-125'> facebook.com/askvirla</a></li>
               </ul>
+              {/*
+              Gmail: library.coc@phinmaed.com
+              Fb page: facebook.com/PHINMACOCLibrary
+              Fb account: facebook.com/askvirla
+              */}
             </div>
           </motion.div>
         </div>
       </main>
 
-      <Footer />
     </div>
   );
 };
