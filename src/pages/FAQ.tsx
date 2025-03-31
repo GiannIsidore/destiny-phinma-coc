@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { Header } from '../components/header';
-import { Footer } from '../components/footer';
 import { motion } from 'framer-motion';
 import { ChevronDown, ChevronUp, ExternalLink } from 'lucide-react';
 import { toast } from 'react-toastify';

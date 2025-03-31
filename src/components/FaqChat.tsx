@@ -1,27 +1,36 @@
 import { useState, useEffect } from 'react';
-import { MessageCircle, X } from 'lucide-react';
+import { MessageCircle, X, ExternalLink } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 interface Faq {
   id: number;
   question: string;
   answer: string;
+  links: string | null;
+}
+
+interface ChatMessage {
+  text: string;
+  isUser: boolean;
+  link?: string;
 }
 
 export const FaqChat = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [faqs, setFaqs] = useState<Faq[]>([]);
-  const [messages, setMessages] = useState<{ text: string; isUser: boolean }[]>([]);
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchFaqs();
   }, []);
 
-  const API_URL = 'http://localhost/destiny-phinma-coc/api';
+  const baseUrl = 'http://localhost/destiny-phinma-coc/';
 
   const fetchFaqs = async () => {
     try {
-      const response = await fetch(`${API_URL}/faq.php?operation=getFaqs`);
+      const response = await fetch(`${baseUrl}api/faq.php?operation=getFaqs`);
       const data = await response.json();
       if (data.status === 'success') {
         setFaqs(data.data);
@@ -40,10 +49,22 @@ export const FaqChat = () => {
     // Simulate typing delay
     setTimeout(() => {
       setMessages(prev => [...prev,
-        { text: faq.answer, isUser: false }
+        {
+          text: faq.answer,
+          isUser: false,
+          link: faq.links || undefined
+        }
       ]);
       setLoading(false);
     }, 500);
+  };
+
+  const handleLinkClick = (link: string) => {
+    if (link.startsWith('/')) {
+      navigate(link);
+    } else {
+      window.open(link, '_blank', 'noopener,noreferrer');
+    }
   };
 
   if (!isOpen) {
@@ -83,8 +104,9 @@ export const FaqChat = () => {
             <p>📧 library.coc@phinmaed.com</p>
             <p>
               <a
-                href="facebook.com/PHINMACOCLibrary"
+                href="https://facebook.com/PHINMACOCLibrary"
                 target="_blank"
+                rel="noopener noreferrer"
                 className="text-blue-600 hover:underline"
               >
                 facebook.com/PHINMACOCLibrary
@@ -108,7 +130,15 @@ export const FaqChat = () => {
                   : 'bg-gray-100 text-gray-800'
               }`}
             >
-              {message.text}
+              <p>{message.text}</p>
+              {!message.isUser && message.link && (
+                <button
+                  onClick={() => handleLinkClick(message.link!)}
+                  className="mt-2 text-blue-600 hover:underline flex items-center gap-1 text-sm"
+                >
+                  Learn more <ExternalLink size={16} />
+                </button>
+              )}
             </div>
           </div>
         ))}

@@ -31,11 +31,12 @@ class Faq
   {
     try {
       $stmt = $this->conn->prepare("
-        INSERT INTO faq_table (question, answer)
-        VALUES (:question, :answer)
+        INSERT INTO faq_table (question, answer, links)
+        VALUES (:question, :answer, :links)
       ");
       $stmt->bindParam(':question', $data['question'], PDO::PARAM_STR);
       $stmt->bindParam(':answer', $data['answer'], PDO::PARAM_STR);
+      $stmt->bindParam(':links', $data['links'], PDO::PARAM_STR);
       $stmt->execute();
 
       return ['status' => 'success', 'message' => 'FAQ added successfully'];
@@ -49,11 +50,12 @@ class Faq
     try {
       $stmt = $this->conn->prepare("
         UPDATE faq_table
-        SET question = :question, answer = :answer
+        SET question = :question, answer = :answer, links = :links
         WHERE id = :id
       ");
       $stmt->bindParam(':question', $data['question'], PDO::PARAM_STR);
       $stmt->bindParam(':answer', $data['answer'], PDO::PARAM_STR);
+      $stmt->bindParam(':links', $data['links'], PDO::PARAM_STR);
       $stmt->bindParam(':id', $data['id'], PDO::PARAM_INT);
       $stmt->execute();
 
@@ -77,12 +79,14 @@ class Faq
   }
 }
 
-if ($_SERVER['REQUEST_METHOD'] == 'GET') {
-  $operation = isset($_GET['operation']) ? $_GET['operation'] : '';
+// Get JSON data from request body for POST requests
+$input = json_decode(file_get_contents('php://input'), true);
+if ($input) {
+  $operation = $input['operation'] ?? '';
+  $json = $input['json'] ?? null;
+} else {
+  $operation = $_GET['operation'] ?? '';
   $json = isset($_GET['json']) ? json_decode($_GET['json'], true) : null;
-} elseif ($_SERVER['REQUEST_METHOD'] == 'POST') {
-  $operation = isset($_POST['operation']) ? $_POST['operation'] : '';
-  $json = isset($_POST['json']) ? json_decode($_POST['json'], true) : null;
 }
 
 $faq = new Faq($conn);
