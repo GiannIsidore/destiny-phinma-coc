@@ -16,6 +16,8 @@ import LibraryServices from './pages/LibraryServices';
 import LibrarySections from './pages/LibrarySections';
 import LibraryPolicies from './pages/LibraryPolicies';
 import EventsPage from './pages/EventsPage';
+import AdminFaqPage from './pages/AdminFaqPage';
+
 function App() {
   return (
     <Router>
@@ -53,6 +55,14 @@ function App() {
           element={
             <ProtectedRoute>
               <AdminEvents />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/faq"
+          element={
+            <ProtectedRoute>
+              <AdminFaqPage />
             </ProtectedRoute>
           }
         />

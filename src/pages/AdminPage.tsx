@@ -2,6 +2,7 @@
 import ScholarsAdmin from "./AdminScholars"
 import FeaturedBooks from "./FeaturedBooks"
 import FeaturedEvents from "./FeaturedEvents"
+import AdminFaqPage from "./AdminFaqPage"
 
 const AdminPage = () => {
   return (
@@ -10,6 +11,7 @@ const AdminPage = () => {
       <FeaturedEvents/>
       <ScholarsAdmin/>
       <FeaturedBooks/>
+      <AdminFaqPage/>
     </div>
   )
 }
