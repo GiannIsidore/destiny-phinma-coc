@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { NavDropdown } from './nav-dropdown';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, Book } from 'lucide-react';
 import { sessionManager } from '../utils/sessionManager';
 
 export const Header = () => {
@@ -33,13 +33,15 @@ export const Header = () => {
     { label: 'Philippine eJournals', href: 'https://ejournals.ph/', isExternal: true },
     { label: 'EBSCO Host', href: 'https://search.ebscohost.com/', isExternal: true },
     { label: 'DOAJ', href: 'https://doaj.org/', isExternal: true },
-    { label: 'Open Access Databases', href: '/open-access' },
+    { label: 'Open Access Databases', href: '/open-access', isExternal: false },
   ];
 
   const resourcesDropdownItems = [
+    { label: 'Books', href: '/books', isExternal: false },
+    { label: 'Events', href: '/events', isExternal: false },
+    { label: 'FAQ', href: '/faq', isExternal: false },
     { label: 'Recommend a Book', href: 'https://docs.google.com/forms/d/1oUmw9g7yoClchMHM-pzrdrW7Jce9n1ofOPKR3xDizDw', isExternal: true },
     { label: 'Ask Virla', href: 'https://www.facebook.com/share/18vXMFiEpU/', isExternal: true },
-    { label: 'FAQ', href: '/faq' },
   ];
 
   const handleLogout = () => {
@@ -56,8 +58,9 @@ export const Header = () => {
         style={{ height: headerHeight }}
       >
         <div className="container mx-auto px-4 h-full flex items-center justify-between">
-          <Link to="/" className="text-xl font-bold text-gray-800">
-            <img src={'logo.jpg'} alt="Logo" className="w-10 h-10" />
+          <Link to="/" className="flex items-center gap-2">
+            <img src={'/logo.jpg'} alt="Logo" className="w-10 h-10" />
+            <span className="text-xl font-bold text-gray-800 hidden sm:inline">PHINMA COC Library</span>
           </Link>
 
           {/* Desktop Navigation */}
@@ -68,12 +71,6 @@ export const Header = () => {
             <NavDropdown label="About" items={aboutDropdownItems} />
             <NavDropdown label="Linkages" items={linkagesDropdownItems} />
             <NavDropdown label="Resources" items={resourcesDropdownItems} />
-            <Link to="/events" className="text-gray-600 hover:text-gray-900">
-              Events
-            </Link>
-            <Link to="/contact" className="text-gray-600 hover:text-gray-900">
-              Contact
-            </Link>
           </nav>
 
           {/* Mobile Menu Button */}
@@ -84,11 +81,15 @@ export const Header = () => {
             {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
           </button>
 
+          {/* Admin or User Actions */}
           {isAdmin ? (
-            <div className="flex items-center gap-4">
-              <span className="text-sm text-gray-600">
-                Welcome, {sessionManager.getUsername()}
-              </span>
+            <div className="hidden md:flex items-center gap-4">
+              <Link
+                to="/admin"
+                className="text-gray-600 hover:text-gray-900 font-medium"
+              >
+                Admin Panel
+              </Link>
               <button
                 onClick={handleLogout}
                 className="px-4 py-2 text-[#1a1a1a] hover:bg-gray-100 rounded transition-colors"
@@ -97,28 +98,17 @@ export const Header = () => {
               </button>
             </div>
           ) : (
-            <div className="flex items-center space-x-4">
+            <div className="hidden md:flex items-center space-x-6">
               <Link
-                to="/library-history"
-                className="text-gray-600 hover:text-[#1a1a1a]"
+                to="/books"
+                className="text-gray-600 hover:text-gray-900 flex items-center gap-1"
               >
-                History
-              </Link>
-              <Link
-                to="/mission-vision"
-                className="text-gray-600 hover:text-[#1a1a1a]"
-              >
-                Mission & Vision
-              </Link>
-              <Link
-                to="/open-access"
-                className="text-gray-600 hover:text-[#1a1a1a]"
-              >
-                Open Access
+                <Book className="h-4 w-4" />
+                <span>Books</span>
               </Link>
               <Link
                 to="/faq"
-                className="text-gray-600 hover:text-[#1a1a1a]"
+                className="text-gray-600 hover:text-gray-900"
               >
                 FAQ
               </Link>
@@ -127,12 +117,13 @@ export const Header = () => {
         </div>
       </header>
 
+      {/* Mobile Menu */}
       {mobileMenuOpen && (
         <div
-          className="fixed md:hidden bg-white border-t border-gray-200 z-[9998] w-full"
+          className="fixed md:hidden bg-white border-t border-gray-200 z-[9998] w-full overflow-y-auto max-h-[calc(100vh-4rem)]"
           style={{ top: headerHeight }}
         >
-          <div className="container mx-auto px-4 py-3 space-y-3">
+          <div className="container mx-auto px-4 py-4 space-y-4">
             <Link
               to="/"
               className="block py-2 text-gray-600 hover:text-gray-900"
@@ -141,39 +132,26 @@ export const Header = () => {
               Home
             </Link>
 
-            <div className="py-2">
+            <div className="py-2 border-t">
               <div className="font-medium text-gray-800 mb-2">About</div>
               <div className="pl-4 space-y-2">
-                {aboutDropdownItems.map((item, index) =>
-                  item.isExternal ? (
-                    <a
-                      key={index}
-                      href={item.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="block text-sm text-gray-600 hover:text-gray-900"
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
-                      {item.label}
-                    </a>
-                  ) : (
-                    <Link
-                      key={index}
-                      to={item.href}
-                      className="block text-sm text-gray-600 hover:text-gray-900"
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
-                      {item.label}
-                    </Link>
-                  )
-                )}
+                {aboutDropdownItems.map((item, index) => (
+                  <Link
+                    key={index}
+                    to={item.href}
+                    className="block text-sm text-gray-600 hover:text-gray-900"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    {item.label}
+                  </Link>
+                ))}
               </div>
             </div>
 
-            <div className="py-2">
+            <div className="py-2 border-t">
               <div className="font-medium text-gray-800 mb-2">Linkages</div>
               <div className="pl-4 space-y-2">
-                {linkagesDropdownItems.map((item, index) =>
+                {linkagesDropdownItems.map((item, index) => (
                   item.isExternal ? (
                     <a
                       key={index}
@@ -195,14 +173,14 @@ export const Header = () => {
                       {item.label}
                     </Link>
                   )
-                )}
+                ))}
               </div>
             </div>
 
-            <div className="py-2">
+            <div className="py-2 border-t">
               <div className="font-medium text-gray-800 mb-2">Resources</div>
               <div className="pl-4 space-y-2">
-                {resourcesDropdownItems.map((item, index) =>
+                {resourcesDropdownItems.map((item, index) => (
                   item.isExternal ? (
                     <a
                       key={index}
@@ -224,24 +202,30 @@ export const Header = () => {
                       {item.label}
                     </Link>
                   )
-                )}
+                ))}
               </div>
             </div>
 
-            <Link
-              to="/events"
-              className="block py-2 text-gray-600 hover:text-gray-900"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              Events
-            </Link>
-            <Link
-              to="/contact"
-              className="block py-2 text-gray-600 hover:text-gray-900"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              Contact
-            </Link>
+            {isAdmin && (
+              <div className="py-2 border-t">
+                <Link
+                  to="/admin"
+                  className="block py-2 text-gray-600 hover:text-gray-900 font-medium"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Admin Panel
+                </Link>
+                <button
+                  onClick={() => {
+                    handleLogout();
+                    setMobileMenuOpen(false);
+                  }}
+                  className="block w-full text-left py-2 text-gray-600 hover:text-gray-900"
+                >
+                  Logout
+                </button>
+              </div>
+            )}
           </div>
         </div>
       )}

@@ -18,6 +18,8 @@ import LibraryPolicies from './pages/LibraryPolicies';
 import EventsPage from './pages/EventsPage';
 import AdminFaqPage from './pages/AdminFaqPage';
 import { FaqChat } from './components/FaqChat';
+import BooksPage from "./pages/BooksPage"
+import BookDetailsPage from "./pages/BookDetailsPage"
 
 function App() {
   return (
@@ -34,6 +36,8 @@ function App() {
         <Route path="/library-sections" element={<LibrarySections />} />
         <Route path="/library-policies" element={<LibraryPolicies />} />
         <Route path="/events" element={<EventsPage />} />
+        <Route path="/books" element={<BooksPage />} />
+        <Route path="/books/:id" element={<BookDetailsPage />} />
         {/* Protected admin routes */}
         <Route
           path="/admin"
