@@ -2,13 +2,15 @@ import { useState, useEffect } from 'react';
 import { Header } from '../components/header';
 import { Footer } from '../components/footer';
 import { motion } from 'framer-motion';
-import { ChevronDown, ChevronUp } from 'lucide-react';
+import { ChevronDown, ChevronUp, ExternalLink } from 'lucide-react';
 import { toast } from 'react-toastify';
+import { Link } from 'react-router-dom';
 
 interface FAQ {
   id: number;
   question: string;
   answer: string;
+  links: string | null;
 }
 
 const FAQ = () => {
@@ -34,6 +36,28 @@ const FAQ = () => {
 
   const toggleFAQ = (index: number) => {
     setOpenIndex(openIndex === index ? null : index);
+  };
+
+  const renderLink = (link: string) => {
+    // Check if it's an internal route (starts with /)
+    if (link.startsWith('/')) {
+      return (
+        <Link to={link} className="text-blue-600 hover:underline flex items-center gap-1">
+          Learn more <ExternalLink size={16} />
+        </Link>
+      );
+    }
+    // External link
+    return (
+      <a
+        href={link}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-blue-600 hover:underline flex items-center gap-1"
+      >
+        Learn more <ExternalLink size={16} />
+      </a>
+    );
   };
 
   return (
@@ -70,7 +94,8 @@ const FAQ = () => {
 
                   {openIndex === index && (
                     <div className="p-4 pt-0 text-gray-700 bg-gray-50">
-                      <p>{faq.answer}</p>
+                      <p className="mb-2">{faq.answer}</p>
+                      {faq.links && renderLink(faq.links)}
                     </div>
                   )}
                 </div>
@@ -84,8 +109,8 @@ const FAQ = () => {
               </p>
               <ul className="space-y-2">
                 <li><strong>Gmail:</strong> library.coc@phinmaed.com</li>
-                <li><strong> Fb page:</strong><a href='facebook.com/PHINMACOCLibrary' className='hover:underline duration-300 transition-all hover:scale-125'> facebook.com/PHINMACOCLibrary</a></li>
-                <li><strong> Fb account:</strong><a href='facebook.com/askvirla' className='hover:underline duration-300 transition-all hover:scale-125'> facebook.com/askvirla</a></li>
+                <li><strong>Fb page:</strong><a href='https://facebook.com/PHINMACOCLibrary' target="_blank" rel="noopener noreferrer" className='hover:underline duration-300 transition-all hover:scale-125'> facebook.com/PHINMACOCLibrary</a></li>
+                <li><strong>Fb account:</strong><a href='https://facebook.com/askvirla' target="_blank" rel="noopener noreferrer" className='hover:underline duration-300 transition-all hover:scale-125'> facebook.com/askvirla</a></li>
               </ul>
               {/*
               Gmail: library.coc@phinmaed.com

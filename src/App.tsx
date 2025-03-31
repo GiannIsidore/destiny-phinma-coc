@@ -17,6 +17,7 @@ import LibrarySections from './pages/LibrarySections';
 import LibraryPolicies from './pages/LibraryPolicies';
 import EventsPage from './pages/EventsPage';
 import AdminFaqPage from './pages/AdminFaqPage';
+import { FaqChat } from './components/FaqChat';
 
 function App() {
   return (
@@ -70,6 +71,7 @@ function App() {
         {/* Catch all route */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
+      <FaqChat />
       <ToastContainer />
     </Router>
   );
