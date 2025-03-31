@@ -71,7 +71,7 @@ export const FaqChat = () => {
     return (
       <button
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-4 right-4 bg-blue-600 text-white p-4 rounded-full shadow-lg hover:bg-blue-700 transition-colors z-50"
+        className="fixed bottom-4 right-4 bg-[#0d542b] text-white p-4 rounded-full shadow-lg hover:bg-[#0a4121] transition-colors z-50"
         title="Ask VIRLA"
       >
         <MessageCircle size={24} />
@@ -82,14 +82,14 @@ export const FaqChat = () => {
   return (
     <div className="fixed bottom-4 right-4 w-96 h-[600px] bg-white rounded-lg shadow-xl flex flex-col z-50">
       {/* Header */}
-      <div className="p-4 bg-blue-600 text-white rounded-t-lg flex justify-between items-center">
+      <div className="p-4 bg-[#0d542b] text-white rounded-t-lg flex justify-between items-center">
         <div className="flex items-center gap-2">
           <MessageCircle size={20} />
           <h3 className="font-semibold">Ask VIRLA</h3>
         </div>
         <button
           onClick={() => setIsOpen(false)}
-          className="hover:bg-blue-700 p-1 rounded"
+          className="hover:bg-[#0a4121] p-1 rounded"
         >
           <X size={20} />
         </button>
@@ -107,7 +107,7 @@ export const FaqChat = () => {
                 href="https://facebook.com/PHINMACOCLibrary"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-blue-600 hover:underline"
+                className="text-[#0d542b] hover:underline"
               >
                 facebook.com/PHINMACOCLibrary
               </a>
@@ -126,7 +126,7 @@ export const FaqChat = () => {
             <div
               className={`max-w-[80%] p-3 rounded-lg ${
                 message.isUser
-                  ? 'bg-blue-600 text-white'
+                  ? 'bg-[#0d542b] text-white'
                   : 'bg-gray-100 text-gray-800'
               }`}
             >
@@ -134,7 +134,7 @@ export const FaqChat = () => {
               {!message.isUser && message.link && (
                 <button
                   onClick={() => handleLinkClick(message.link!)}
-                  className="mt-2 text-blue-600 hover:underline flex items-center gap-1 text-sm"
+                  className="mt-2 text-[#0d542b] hover:underline flex items-center gap-1 text-sm"
                 >
                   Learn more <ExternalLink size={16} />
                 </button>
@@ -161,7 +161,7 @@ export const FaqChat = () => {
             <button
               key={faq.id}
               onClick={() => handleQuestionClick(faq)}
-              className="w-full text-left p-2 text-sm text-gray-700 hover:bg-gray-100 rounded transition-colors"
+              className="w-full text-left p-2 text-sm text-gray-700 hover:bg-[#0d542b] hover:text-white rounded transition-colors"
             >
               {faq.question}
             </button>
