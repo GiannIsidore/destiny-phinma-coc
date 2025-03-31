@@ -6,6 +6,7 @@ export interface DestinyBook {
 
 export function generateDestinyUrl(bibID: string): string {
   // Include all necessary parameters for a valid book details request
+  // Mao nia ang need para dili maag resubmit
   const params = {
     bibID: bibID,
     site: '100',
@@ -13,7 +14,7 @@ export function generateDestinyUrl(bibID: string): string {
     includeLibrary: 'true',
     includeMedia: 'false',
     mediaSiteID: '',
-    walkerID: Date.now().toString(), // Generate a fresh walkerID
+    walkerID: Date.now().toString(),
     context: 'saas910_8520022'
   };
 

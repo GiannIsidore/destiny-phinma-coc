@@ -19,11 +19,11 @@ export function ParallaxHero() {
         <h1 className="text-4xl md:text-6xl font-bold mb-4">Welcome to PHINMA COC Library</h1>
         <p className="text-xl md:text-2xl mb-8">Discover, Learn, and Grow with Us</p>
         <a
-          href={`https://phinmacoclibrary-opac.follettdestiny.com/common/servlet/presenthomeform.do?l2m=Home&tm=Home&l2m=Home`}
+          href={`https://phinmacoclibrary-opac.follettdestiny.com/common/welcome.jsp?context=saas910_8520022e`}
           target="_blank"
           rel="noopener noreferrer"
         >
-          <Button className="px-6 py-3 bg-primary text-white font-semibold rounded-md hover:bg-primary-600 transition duration-300 ease-in-out transform hover:scale-105">
+          <Button className="bg-green-800 hover:scale-125 duration-300 transition-all hover:bg-green-900">
             Explore Our Collection
           </Button>
         </a>

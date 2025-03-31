@@ -39,7 +39,7 @@ export const Header = () => {
     { label: 'FAQ', href: '/faq' },
   ];
 
-  // Use fixed header heights: h-14 (3.5rem) when scrolled, otherwise h-16 (4rem)
+
   const headerHeight = scrolled ? '3.5rem' : '4rem';
 
   return (

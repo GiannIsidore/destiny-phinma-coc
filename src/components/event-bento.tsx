@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react"
 import { Calendar, Clock, ArrowRight, X, ExternalLink } from "lucide-react"
-import { Badge } from "../components/ui/badge"
+import { Badge } from "./ui/badge.tsx"
 
 interface Event {
   id: number
@@ -275,7 +275,7 @@ export default function EventBento() {
       // Three or more events - full bento box layout
       return (
         <div
-          className="grid grid-cols-1 md:grid-cols-6 md:grid-rows-6 gap-4 auto-rows-fr"
+          className="grid grid-cols-1 md:grid-cols-6 md:grid-rows-2 gap-4 auto-rows-fr"
           style={{ minHeight: "800px" }}
         >
           {/* Featured Event - Large */}

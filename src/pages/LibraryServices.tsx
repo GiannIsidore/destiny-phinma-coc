@@ -7,21 +7,22 @@ const LibraryServices = () => {
     <div className="flex flex-col min-h-screen" >
       <Header />
 
-      <main className="flex-grow pt-24 pb-16 " style={{
-        backgroundImage: "url('https://coc.phinma.edu.ph/wp-content/uploads/2024/03/PHINMA-COC-MAIN.jpg')",
-        backgroundAttachment: "fixed",
-        backgroundPosition: "center",
-        backgroundRepeat: "no-repeat",
-        backgroundSize: "cover",
-        filter: "blur(8px)",
-        zIndex: -1
-        }}>
-        <div className="container mx-auto px-4">
+      <main className="relative flex-grow pt-24 pb-16  " >
+        <div className="absolute inset-0" style={{
+          backgroundImage: "url('https://coc.phinma.edu.ph/wp-content/uploads/2024/03/PHINMA-COC-MAIN.jpg')",
+          backgroundAttachment: "fixed",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+          backgroundSize: "cover",
+          filter: "blur(8px)",
+          zIndex: -1
+        }} />
+        <div className="container mx-auto px-4 z-[9999] ">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="max-w-4xl mx-auto"
+            className="max-w-4xl mx-auto z-[9999]"
           >
             <h1 className="text-3xl font-bold mb-8 text-white">Library Services</h1>
 
