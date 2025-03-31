@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react"
 import { Calendar, Clock, ArrowRight, X, ExternalLink } from "lucide-react"
 import { Badge } from "./ui/badge.tsx"
+import { BASE_URL } from '../lib/config'
 
 interface Event {
   id: number
@@ -33,7 +34,7 @@ export default function EventBento() {
     const fetchEvents = async () => {
       setIsLoading(true)
       try {
-        const response = await fetch("http://localhost/destiny-phinma-coc/api/event.php?operation=getEvents")
+        const response = await fetch(`${BASE_URL}api/event.php?operation=getEvents`)
 
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`)

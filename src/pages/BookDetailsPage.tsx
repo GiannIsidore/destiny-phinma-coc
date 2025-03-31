@@ -7,6 +7,7 @@ import { Footer } from "../components/footer"
 import { motion } from "framer-motion"
 import { Calendar, ArrowLeft, Book, Loader2, ExternalLink } from "lucide-react"
 import { generateDestinyUrl, validateDestinyUrl, extractBibID } from "../lib/destiny"
+import { BASE_URL } from '../lib/config';
 
 interface Book {
   id: number
@@ -65,7 +66,7 @@ const BookDetailsPage = () => {
       try {
         // Fetch book details from our database
         const response = await fetch(
-          `http://localhost/destiny-phinma-coc/api/book.php?operation=getBookById&json={"id":${id}}`,
+          `${BASE_URL}api/book.php?operation=getBookById&json={"id":${id}}`
         )
 
         if (!response.ok) {

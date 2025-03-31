@@ -5,6 +5,7 @@ import { Header } from "../components/header"
 import { Footer } from "../components/footer"
 import { motion } from "framer-motion"
 import { Calendar, Clock, ChevronRight, Search, BookOpen, X } from "lucide-react"
+import { BASE_URL } from '../lib/config';
 
 interface Event {
   id: number
@@ -30,7 +31,7 @@ const EventsPage = () => {
     const fetchEvents = async () => {
       setIsLoading(true)
       try {
-        const response = await fetch("http://localhost/destiny-phinma-coc/api/event.php?operation=getEvents")
+        const response = await fetch(`${BASE_URL}api/event.php?operation=getEvents`)
 
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`)

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { MessageCircle, X, ExternalLink } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { BASE_URL } from '../lib/config';
 
 interface Faq {
   id: number;
@@ -26,11 +27,9 @@ export const FaqChat = () => {
     fetchFaqs();
   }, []);
 
-  const baseUrl = 'http://localhost/destiny-phinma-coc/';
-
   const fetchFaqs = async () => {
     try {
-      const response = await fetch(`${baseUrl}api/faq.php?operation=getFaqs`);
+      const response = await fetch(`${BASE_URL}api/faq.php?operation=getFaqs`);
       const data = await response.json();
       if (data.status === 'success') {
         setFaqs(data.data);

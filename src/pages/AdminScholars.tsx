@@ -13,6 +13,7 @@ import { toast } from "react-toastify"
 import { Loader2, Upload, X, Pencil, Plus } from "lucide-react"
 import { cn } from "../lib/utils"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "../components/ui/dialog"
+import { API_URL } from '../lib/config'
 
 interface ScholarForm {
   fname: string
@@ -53,8 +54,6 @@ interface ScholarProfile {
   month: string
   imgurl: string
 }
-
-const API_URL = 'http://localhost/destiny-phinma-coc/api'
 
 // Scholar Edit Dialog Component
 function ScholarEditDialog({

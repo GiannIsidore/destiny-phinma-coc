@@ -43,6 +43,36 @@ class Book
       return ['status' => 'error', 'message' => $e->getMessage()];
     }
   }
+  public function getBooksTop()
+  {
+    try {
+      $stmt = $this->conn->query("
+         SELECT b.*, bb.book_img
+        FROM books_tble b
+        LEFT JOIN book_blob bb ON b.img_id = bb.id
+        ORDER BY b.added_at DESC
+        LIMIT 5
+      ");
+      $books = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+      // Encode image data to base64 for each book
+      foreach ($books as &$book) {
+        if ($book['book_img']) {
+          // Force PDO to return the raw binary data
+          $stmt = $this->conn->prepare("SELECT book_img FROM book_blob WHERE id = ?");
+          $stmt->execute([$book['img_id']]);
+          $row = $stmt->fetch(PDO::FETCH_ASSOC);
+          if ($row && $row['book_img']) {
+            $book['book_img'] = base64_encode($row['book_img']);
+          }
+        }
+      }
+
+      return ['status' => 'success', 'data' => $books];
+    } catch (PDOException $e) {
+      return ['status' => 'error', 'message' => $e->getMessage()];
+    }
+  }
 
   public function addBook($data)
   {
@@ -179,6 +209,9 @@ $book = new Book($conn);
 switch ($operation) {
   case 'getBooks':
     echo json_encode($book->getBooks());
+    break;
+  case 'getBooksTop':
+    echo json_encode($book->getBooksTop());
     break;
   case 'getBookById':
     echo json_encode($book->getBookById($json['id']));

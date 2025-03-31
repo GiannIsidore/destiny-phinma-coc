@@ -6,6 +6,7 @@ import { Footer } from "../components/footer"
 import { motion } from "framer-motion"
 import { Calendar, Search, Book, X, ChevronRight } from "lucide-react"
 import { Link } from "react-router-dom"
+import { BASE_URL } from '../lib/config'
 
 interface Book {
   id: number
@@ -32,7 +33,7 @@ const BooksPage = () => {
     const fetchBooks = async () => {
       setIsLoading(true)
       try {
-        const response = await fetch("http://localhost/destiny-phinma-coc/api/book.php?operation=getBooks")
+        const response = await fetch(`${BASE_URL}api/book.php?operation=getBooks`)
 
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`)

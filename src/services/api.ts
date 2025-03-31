@@ -1,6 +1,5 @@
 import axios from 'axios';
-
-const API_URL = 'http://localhost/destiny-phinma-coc/api';
+import { API_URL } from '../lib/config';
 
 const api = axios.create({
   baseURL: API_URL,

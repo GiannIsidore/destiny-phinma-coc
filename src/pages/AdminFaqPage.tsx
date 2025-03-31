@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { Pencil, Trash2, Plus, X, Link as LinkIcon } from 'lucide-react';
+import { BASE_URL } from '../lib/config';
 
 interface FAQ {
   id: number;
@@ -18,7 +19,7 @@ const AdminFaqPage = () => {
     answer: '',
     links: ''
   });
-  const baseUrl = 'http://localhost/destiny-phinma-coc/';
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     fetchFaqs();
@@ -26,13 +27,16 @@ const AdminFaqPage = () => {
 
   const fetchFaqs = async () => {
     try {
-      const response = await fetch(`${baseUrl}api/faq.php?operation=getFaqs`);
+      setLoading(true);
+      const response = await fetch(`${BASE_URL}api/faq.php?operation=getFaqs`);
       const data = await response.json();
       if (data.status === 'success') {
         setFaqs(data.data);
       }
-    } catch {
-      toast.error('Failed to fetch FAQs');
+    } catch (error) {
+      console.error('Error fetching FAQs:', error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -49,7 +53,7 @@ const AdminFaqPage = () => {
     };
 
     try {
-      const response = await fetch(`${baseUrl}api/faq.php`, {
+      const response = await fetch(`${BASE_URL}api/faq.php`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -74,7 +78,7 @@ const AdminFaqPage = () => {
     if (!window.confirm('Are you sure you want to delete this FAQ?')) return;
 
     try {
-      const response = await fetch(`${baseUrl}api/faq.php`, {
+      const response = await fetch(`${BASE_URL}api/faq.php`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

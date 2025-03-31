@@ -8,12 +8,11 @@ import { Trash2, Upload } from 'lucide-react'
 import { toast } from 'react-toastify'
 import { EditEventDialog } from '../components/edit-event-dialog'
 import type { EventData } from '../services/api'
+import { API_URL } from '../lib/config'
 
 interface Event extends EventData {
   created_at: string
 }
-
-const API_URL = 'http://localhost/destiny-phinma-coc/api'
 
 const EventsAdmin = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
@@ -32,6 +31,7 @@ const EventsAdmin = () => {
   const fetchEvents = useCallback(async () => {
     console.log('Fetching events...')
     try {
+      setLoading(true)
       const response = await fetch(`${API_URL}/event.php?operation=getEvents`)
       const data = await response.json()
 

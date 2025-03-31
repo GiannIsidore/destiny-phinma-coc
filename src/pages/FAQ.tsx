@@ -2,8 +2,8 @@ import { useState, useEffect } from 'react';
 import { Header } from '../components/header';
 import { motion } from 'framer-motion';
 import { ChevronDown, ChevronUp, ExternalLink } from 'lucide-react';
-import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
+import { BASE_URL } from '../lib/config';
 
 interface FAQ {
   id: number;
@@ -15,7 +15,6 @@ interface FAQ {
 const FAQ = () => {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const [faqs, setFaqs] = useState<FAQ[]>([]);
-  const baseUrl = 'http://localhost/destiny-phinma-coc/';
 
   useEffect(() => {
     fetchFaqs();
@@ -23,13 +22,13 @@ const FAQ = () => {
 
   const fetchFaqs = async () => {
     try {
-      const response = await fetch(`${baseUrl}api/faq.php?operation=getFaqs`);
+      const response = await fetch(`${BASE_URL}api/faq.php?operation=getFaqs`);
       const data = await response.json();
       if (data.status === 'success') {
         setFaqs(data.data);
       }
-    } catch {
-      toast.error('Failed to fetch FAQs');
+    } catch (error) {
+      console.error('Error fetching FAQs:', error);
     }
   };
 
@@ -38,21 +37,19 @@ const FAQ = () => {
   };
 
   const renderLink = (link: string) => {
-    // Check if it's an internal route (starts with /)
     if (link.startsWith('/')) {
       return (
-        <Link to={link} className="text-blue-600 hover:underline flex items-center gap-1">
+        <Link to={link} className="text-[#0d542b] hover:underline flex items-center gap-1">
           Learn more <ExternalLink size={16} />
         </Link>
       );
     }
-    // External link
     return (
       <a
         href={link}
         target="_blank"
         rel="noopener noreferrer"
-        className="text-blue-600 hover:underline flex items-center gap-1"
+        className="text-[#0d542b] hover:underline flex items-center gap-1"
       >
         Learn more <ExternalLink size={16} />
       </a>

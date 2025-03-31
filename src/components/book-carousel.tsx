@@ -194,6 +194,9 @@ export function BookCarousel() {
         >
           <ChevronLeft className="w-6 h-6" />
         </button>
+        <a href="/books">
+          view books
+        </a>
         <button
           onClick={() => navigate('next')}
           className="p-2 rounded-full bg-white/80 shadow-md hover:bg-white transition-colors backdrop-blur-sm"

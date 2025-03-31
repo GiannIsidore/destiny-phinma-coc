@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom"
 import { toast } from "react-toastify"
 import { sessionManager } from "../utils/sessionManager"
 import { Eye, EyeOff } from "lucide-react"
+import { BASE_URL } from '../lib/config';
 
 export const LoginPage = () => {
   const navigate = useNavigate()
@@ -14,6 +15,7 @@ export const LoginPage = () => {
     school_id: "",
     password: "",
   })
+  const [loading, setLoading] = useState(false)
 
   // Password visibility state
   const [showPassword, setShowPassword] = useState(false)
@@ -37,6 +39,12 @@ export const LoginPage = () => {
     setCaptcha({ num1, num2, answer: "" })
   }
 
+  // Reset form
+  const resetForm = () => {
+    setFormData({ school_id: "", password: "" })
+    generateCaptcha()
+  }
+
   // Validate captcha answer
   const validateCaptcha = () => {
     return Number.parseInt(captcha.answer) === captcha.num1 + captcha.num2
@@ -44,16 +52,18 @@ export const LoginPage = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    setLoading(true)
 
     // Validate captcha before proceeding
     if (!validateCaptcha()) {
       toast.error("Incorrect captcha answer. Please try again.")
       generateCaptcha()
+      setLoading(false)
       return
     }
 
     try {
-      const response = await fetch("http://localhost/destiny-phinma-coc/api/login.php", {
+      const response = await fetch(`${BASE_URL}api/login.php`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -69,15 +79,18 @@ export const LoginPage = () => {
           isAuthenticated: true
         });
         toast.success("Login successful!");
+        resetForm();
         navigate("/admin");
       } else {
         toast.error(data.message);
-        generateCaptcha(); // Regenerate captcha on failed login
+        generateCaptcha();
       }
     } catch (error) {
       toast.error("An error occurred during login")
       console.error(error)
-      generateCaptcha() // Regenerate captcha on error
+      generateCaptcha()
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -92,7 +105,6 @@ export const LoginPage = () => {
     >
       <div className="absolute inset-0 bg-black/50"></div>
 
-
       <div className="bg-white p-8 rounded-lg shadow-xl w-full max-w-md z-10 backdrop-filter backdrop-blur-sm bg-opacity-90">
         <h1 className="text-3xl font-bold mb-6 text-center text-gray-800">Admin Login</h1>
 
@@ -106,8 +118,9 @@ export const LoginPage = () => {
               type="text"
               value={formData.school_id}
               onChange={(e) => setFormData({ ...formData, school_id: e.target.value })}
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors"
+              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#0d542b] focus:border-[#0d542b] transition-colors"
               required
+              disabled={loading}
             />
           </div>
 
@@ -121,14 +134,16 @@ export const LoginPage = () => {
                 type={showPassword ? "text" : "password"}
                 value={formData.password}
                 onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors pr-10"
+                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#0d542b] focus:border-[#0d542b] transition-colors pr-10"
                 required
+                disabled={loading}
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
                 className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none"
                 aria-label={showPassword ? "Hide password" : "Show password"}
+                disabled={loading}
               >
                 {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
               </button>
@@ -144,17 +159,19 @@ export const LoginPage = () => {
               type="text"
               value={captcha.answer}
               onChange={(e) => setCaptcha({ ...captcha, answer: e.target.value })}
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors"
+              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#0d542b] focus:border-[#0d542b] transition-colors"
               required
               placeholder="Enter the sum"
+              disabled={loading}
             />
           </div>
 
           <button
             type="submit"
-            className="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors"
+            className="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-[#0d542b] hover:bg-[#0a4322] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#0d542b] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            disabled={loading}
           >
-            Sign in
+            {loading ? "Signing in..." : "Sign in"}
           </button>
         </form>
 

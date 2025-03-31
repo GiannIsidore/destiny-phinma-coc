@@ -5,6 +5,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs"
 import { toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import { Award, BookOpen, HandHeart, X } from "lucide-react"
+import { API_URL } from '../lib/config'
 
 interface ScholarProfile {
   id: string
@@ -19,8 +20,6 @@ interface ScholarProfile {
   hk_image?: string
 }
 
-const API_URL = "http://localhost/destiny-phinma-coc/api"
-
 const ProfileLayoutV3 = () => {
   const [saData, setSaData] = useState<ScholarProfile | null>(null)
   const [hkData, setHkData] = useState<ScholarProfile | null>(null)
@@ -28,31 +27,32 @@ const ProfileLayoutV3 = () => {
   const [error, setError] = useState<string | null>(null)
   const [selectedImage, setSelectedImage] = useState<string | null>(null)
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const saResponse = await fetch(`${API_URL}/sa.php?operation=getSA`)
-        const saResult = await saResponse.json()
+  const fetchScholars = async () => {
+    try {
+      setLoading(true)
+      const [saResponse, hkResponse] = await Promise.all([
+        fetch(`${API_URL}/sa.php?operation=getSA`),
+        fetch(`${API_URL}/hk.php?operation=getHK`)
+      ])
 
-        if (saResult.status === "success" && saResult.data) {
-          setSaData(saResult.data)
-        }
+      const saData = await saResponse.json()
+      const hkData = await hkResponse.json()
 
-        const hkResponse = await fetch(`${API_URL}/hk.php?operation=getHK`)
-        const hkResult = await hkResponse.json()
-
-        if (hkResult.status === "success" && hkResult.data) {
-          setHkData(hkResult.data)
-        }
-      } catch (err) {
-        setError("Failed to fetch scholar data")
-        toast.error(`Failed to load scholar data,${err}`)
-      } finally {
-        setLoading(false)
+      if (saData.status === 'success' && hkData.status === 'success') {
+        setSaData(saData.data)
+        setHkData(hkData.data)
       }
+    } catch (error) {
+      console.error('Error fetching scholars:', error)
+      setError("Failed to fetch scholar data")
+      toast.error(`Failed to load scholar data,${error}`)
+    } finally {
+      setLoading(false)
     }
+  }
 
-    fetchData()
+  useEffect(() => {
+    fetchScholars()
   }, [])
 
   const currentDate = new Date()
@@ -266,4 +266,3 @@ const ProfileLayoutV3 = () => {
 }
 
 export default ProfileLayoutV3
-
