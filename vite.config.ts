@@ -1,26 +1,30 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
-import tailwindcss from '@tailwindcss/vite'
 import path from "path"
-import autoprefixer from "autoprefixer";
+
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [
-    react(),
-    tailwindcss(),
-  ],
+  plugins: [react()],
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
     },
   },
-  server: {
-    allowedHosts: ['phinma.loca.lt','6c4d-175-176-84-12.ngrok-free.app','lazy-rat-41.loca.lt','localhost']
-
+  build: {
+    chunkSizeWarningLimit: 1000,
+    cssMinify: true,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ['react', 'react-dom', 'react-router-dom'],
+        }
+      }
+    }
   },
   css: {
-    postcss: {
-      plugins: [ autoprefixer()],
-    },
+    postcss: './postcss.config.js'
   },
+  server: {
+    allowedHosts: ['phinma.loca.lt','6c4d-175-176-84-12.ngrok-free.app','lazy-rat-41.loca.lt','localhost']
+  }
 })

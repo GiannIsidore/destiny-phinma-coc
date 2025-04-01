@@ -1,8 +1,8 @@
 export default {
   plugins: {
-    "postcss-import": {},
-    "postcss-flexbugs-fixes": {},
+    'tailwindcss/nesting': {},
     tailwindcss: {},
     autoprefixer: {},
-  },
+    ...(process.env.NODE_ENV === 'production' ? { cssnano: {} } : {})
+  }
 }
