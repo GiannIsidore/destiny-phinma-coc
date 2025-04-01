@@ -1,9 +1,9 @@
 <?php
 // Database configuration
-$db_host = 'localhost';  // Use localhost since MySQL is on the same machine
-$db_name = 'destiny-coc'; // Your database name (with hyphen, not underscore)
-$db_user = 'root';       // Your MySQL username
-$db_pass = '';          // Your MySQL password
+$db_host = 'destiny-coc.c16o000uwm7l.ap-southeast-2.rds.amazonaws.com';  // Use localhost since MySQL is on the same machine
+$db_name = 'destiny-schema'; // Your database name (with hyphen, not underscore)
+$db_user = 'admin';       // Your MySQL username
+$db_pass = 'Giann_Isidore15';          // Your MySQL password
 
 try {
   $conn = new PDO(
