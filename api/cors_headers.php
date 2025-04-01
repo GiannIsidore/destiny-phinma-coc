@@ -4,7 +4,7 @@ header("Content-Type: application/json; charset=UTF-8");
 
 // Allow specific origins
 $allowed_origins = [
-  'https://lazy-rat-41.loca.lt',
+  'https://phinma-coc-lib.netlify.app',
   'http://localhost:5173',
   'http://localhost'
 ];
