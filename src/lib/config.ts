@@ -9,7 +9,7 @@ const hostname = window.location.hostname;
 //   ? 'https://phinma.loca.lt/destiny-phinma-coc/'  // Backend tunnel URL
 //   : 'http://localhost/destiny-phinma-coc/';       // Local development
 
-  export const BASE_URL = 'https://phinma.loca.lt/destiny-phinma-coc/';  // Backend tunnel URL
+  export const BASE_URL = 'https://38de-175-176-84-12.ngrok-free.app/destiny-phinma-coc/';  // Backend tunnel URL
 
 export const API_URL = `${BASE_URL}api`;
 
