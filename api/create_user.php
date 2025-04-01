@@ -1,5 +1,6 @@
 <?php
 include_once 'connection.php';
+include_once 'cors_headers.php';
 
 $user_data = [
   'school_id' => '02-2021-04543',

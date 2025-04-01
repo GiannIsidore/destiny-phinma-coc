@@ -13,4 +13,8 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  server: {
+    allowedHosts: ['phinma.loca.lt','6c4d-175-176-84-12.ngrok-free.app','lazy-rat-41.loca.lt','localhost']
+
+  }
 })
