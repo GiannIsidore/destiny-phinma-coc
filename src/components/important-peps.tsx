@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs"
 import { toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
-import { Award, BookOpen, HandHeart, X } from "lucide-react"
+import { Award, BookOpen, GraduationCap, X } from "lucide-react"
 import { API_URL } from '../lib/config'
 
 interface ScholarProfile {
@@ -208,7 +208,7 @@ const ProfileLayoutV3 = () => {
                     {/* Details */}
                     <div className="flex flex-col justify-center text-center md:text-left p-2 sm:p-4">
                   <span className="inline-flex items-center justify-center md:justify-start text-white px-3 sm:px-4 md:px-6 py-1 sm:py-2 rounded-full text-sm sm:text-base md:text-lg font-semibold bg-white/20 backdrop-blur-sm mb-3 sm:mb-4 md:mb-6 mx-auto md:mx-0 w-fit">
-                    <HandHeart className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 mr-2" /> Hawak Kamay Scholar of the Month
+                    <GraduationCap className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 mr-2" /> Hawak Kamay Scholar of the Month
                   </span>
                       <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-3 sm:mb-4 md:mb-6 leading-tight">
                         {getFullName(hkData)}
@@ -226,7 +226,7 @@ const ProfileLayoutV3 = () => {
                   </div>
               ) : (
                   <div className="text-center p-6 sm:p-8 md:p-12 rounded-xl sm:rounded-2xl bg-gradient-to-br from-white/20 to-white/10 backdrop-blur-sm">
-                    <HandHeart className="w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 mx-auto text-primary mb-4 sm:mb-6" />
+                    <GraduationCap className="w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 mx-auto text-primary mb-4 sm:mb-6" />
                     <p className="text-white/90 text-lg sm:text-xl md:text-2xl">
                       No Hawak Kamay Scholar selected for {month}
                     </p>
