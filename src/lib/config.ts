@@ -2,12 +2,14 @@
 const hostname = window.location.hostname;
 
 // Determine if we're running on localtunnel
-const isLocaltunnel = hostname.includes('.loca.lt');
+// const isLocaltunnel = hostname.includes('.loca.lt');
 
 // Set the base URL accordingly
-export const BASE_URL = isLocaltunnel
-  ? 'https://phinma.loca.lt/destiny-phinma-coc/'  // Backend tunnel URL
-  : 'http://localhost/destiny-phinma-coc/';       // Local development
+// export const BASE_URL = isLocaltunnel
+//   ? 'https://phinma.loca.lt/destiny-phinma-coc/'  // Backend tunnel URL
+//   : 'http://localhost/destiny-phinma-coc/';       // Local development
+
+  export const BASE_URL = 'https://phinma.loca.lt/destiny-phinma-coc/';  // Backend tunnel URL
 
 export const API_URL = `${BASE_URL}api`;
 
