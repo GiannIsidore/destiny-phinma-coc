@@ -3,6 +3,14 @@ import { Link, useNavigate } from 'react-router-dom';
 import { NavDropdown } from './nav-dropdown';
 import {Menu, X, Book, LogInIcon} from 'lucide-react';
 import { sessionManager } from '../utils/sessionManager';
+import { BASE_URL } from '../lib/config'
+interface UnitLibrary {
+  library_id: number
+  library_name: string
+  library_description: string
+
+}
+
 
 export const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -10,10 +18,41 @@ export const Header = () => {
   const navigate = useNavigate();
   const isLoggedIn = sessionManager.getSession() !== null;
   const isAdmin = isLoggedIn && sessionManager.getRole() === 'admin';
+  const [unitLibraries, setUnitLibraries] = useState<UnitLibrary[]>([]);
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!mobileMenuOpen);
   };
 
+
+
+  // const [isLoading, setIsLoading] = useState(true)
+  // const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    const fetchUnitLibraries = async () => {
+      // setIsLoading(true)
+      try {
+        const response = await fetch(`${BASE_URL}api/unit_libraries.php?operation=getLibraries`)
+
+        if (!response.ok) {
+          console.log(`HTTP error! Status: ${response.status}`)
+        }
+
+        const data = await response.json()
+
+        if (data.status === "success" && Array.isArray(data.data)) {
+          // Sort books in descending order by created_at
+          setUnitLibraries(data.data);
+        }
+      } catch (error) {
+        console.error("Error fetching books:", error)
+
+      } finally {
+        // setIsLoading(false)
+      }
+    };
+    fetchUnitLibraries();
+  }, [])
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener('scroll', handleScroll);
@@ -23,25 +62,45 @@ export const Header = () => {
   const aboutDropdownItems = [
     { label: 'Mission Vision', href: '/mission-vision', isExternal: false },
     { label: 'Library History', href: '/library-history', isExternal: false },
-    { label: 'Library Sections', href: '/library-sections', isExternal: false },
-    { label: 'Library Services', href: '/library-services', isExternal: false },
     { label: 'Library Policies', href: '/library-policies', isExternal: false },
+  ];
+  const unitLibDropdownItems = [
+
+    ...(unitLibraries.map(library => ({
+      label: library.library_name,
+      href: `/unit-library/${library.library_id}`,
+      isExternal: false,
+    })))
   ];
 
   const linkagesDropdownItems = [
-    { label: 'OPAC', href: 'https://phinmacoclibrary-opac.follettdestiny.com', isExternal: true },
+    { label: 'PAARL, Inc.Philippine Association of Academic / Research Librarians, Inc.', href: 'https://paarl.org.ph/', isExternal: true },
+    {label: 'ALINet' , href: 'https://web.facebook.com/19alinet88?locale=es_LA'},
     { label: 'Philippine eJournals', href: 'https://ejournals.ph/', isExternal: true },
     { label: 'EBSCO Host', href: 'https://search.ebscohost.com/', isExternal: true },
-    { label: 'DOAJ', href: 'https://doaj.org/', isExternal: true },
-    { label: 'Open Access Databases', href: '/open-access', isExternal: false },
+    // { label: 'DOAJ', href: 'https://doaj.org/', isExternal: true },
+    // { label: 'Open Access Databases', href: '/open-access', isExternal: false },
   ];
 
+  const servicesDropdownItems = [
+    { label: 'Library Services', href: '/services', isExternal: false },
+    { label: 'FAQ', href: '/faq', isExternal: false },
+    { label: 'Recommend a Book', href: 'https://docs.google.com/forms/d/1oUmw9g7yoClchMHM-pzrdrW7Jce9n1ofOPKR3xDizDw', isExternal: true },
+    { label: 'Ask Virla', href: 'https://www.facebook.com/share/18vXMFiEpU/', isExternal: true },
+  ];
   const resourcesDropdownItems = [
     { label: 'Books', href: '/books', isExternal: false },
     { label: 'Events', href: '/events', isExternal: false },
     { label: 'FAQ', href: '/faq', isExternal: false },
     { label: 'Recommend a Book', href: 'https://docs.google.com/forms/d/1oUmw9g7yoClchMHM-pzrdrW7Jce9n1ofOPKR3xDizDw', isExternal: true },
     { label: 'Ask Virla', href: 'https://www.facebook.com/share/18vXMFiEpU/', isExternal: true },
+  ];
+  const databasesDropdownItems = [
+    { label: 'OPAC', href: 'https://phinmacoclibrary-opac.follettdestiny.com', isExternal: true },
+    { label: 'Philippine eJournals', href: 'https://ejournals.ph/', isExternal: true },
+    { label: 'EBSCO Host', href: 'https://search.ebscohost.com/', isExternal: true },
+    { label: 'DOAJ', href: 'https://doaj.org/', isExternal: true },
+    {label: 'Starbooks', href: 'https://www.starbooks.ph/', isExternal: true},
   ];
 
   const handleLogout = () => {
@@ -69,8 +128,11 @@ export const Header = () => {
               Home
             </Link>
             <NavDropdown label="About" items={aboutDropdownItems} />
-            <NavDropdown label="Linkages" items={linkagesDropdownItems} />
+            <NavDropdown label="Unit Libraries" items={unitLibDropdownItems} />
+            {/* <NavDropdown label="Linkages" items={linkagesDropdownItems} /> */}
             <NavDropdown label="Resources" items={resourcesDropdownItems} />
+            <NavDropdown label="Databases" items={databasesDropdownItems} />
+           <NavDropdown label='Services' items={servicesDropdownItems} />
           </nav>
 
           {/* Mobile Menu Button */}
@@ -158,9 +220,38 @@ export const Header = () => {
                 ))}
               </div>
             </div>
-
             <div className="py-2 border-t">
-              <div className="font-medium text-gray-800 mb-2">Linkages</div>
+              <div className="font-medium text-gray-800 mb-2">Services</div>
+              <div className="pl-4 space-y-2">
+                {servicesDropdownItems.map((item, index) => (
+                  <Link
+                    key={index}
+                    to={item.href}
+                    className="block text-sm text-gray-600 hover:text-gray-900"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    {item.label}
+                  </Link>
+                ))}
+              </div>
+            </div>
+            <div className="py-2 border-t">
+              <div className="font-medium text-gray-800 mb-2">Unit Libraries</div>
+              <div className="pl-4 space-y-2">
+                {unitLibDropdownItems.map((item, index) => (
+                  <Link
+                    key={index}
+                    to={item.href}
+                    className="block text-sm text-gray-600 hover:text-gray-900"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    {item.label}
+                  </Link>
+                ))}
+              </div>
+            </div>
+            <div className="py-2 border-t">
+              <div className="font-medium text-gray-800 mb-2">Unit Libraries</div>
               <div className="pl-4 space-y-2">
                 {linkagesDropdownItems.map((item, index) => (
                   item.isExternal ? (
@@ -213,6 +304,16 @@ export const Header = () => {
                       {item.label}
                     </Link>
                   )
+                ))}
+              </div>
+            </div>
+            <div className="py-2 border-t">
+              <div className="font-medium text-gray-800 mb-2">Databases</div>
+              <div className="pl-4 space-y-2">
+                {databasesDropdownItems.map((item) => (
+                  <Link to={item.href} className="block text-sm text-gray-600 hover:text-gray-900" onClick={() => setMobileMenuOpen(false)}>
+                    {item.label}
+                  </Link>
                 ))}
               </div>
             </div>

@@ -2,9 +2,11 @@ import ScholarsAdmin from "./AdminScholars";
 import FeaturedBooks from "./FeaturedBooks";
 import FeaturedEvents from "./FeaturedEvents";
 import AdminFaqPage from "./AdminFaqPage";
+import AdminLibraries from "./AdminLibraries";
 import { useState, useEffect } from "react";
 import { sessionManager } from "../utils/sessionManager";
-import { LogOut, Menu, BookOpen, Users, Calendar, HelpCircle, X } from "lucide-react";
+import { LogOut, Menu, BookOpen, Users, Calendar, HelpCircle, X, Library, Cog } from "lucide-react";
+import AdminServicesPage from "./AdminServices";
 
 const AdminPage = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -29,7 +31,7 @@ const AdminPage = () => {
 
   const handleLogout = () => {
     sessionManager.clearSession();
-    window.location.href = "/login";
+    window.location.href = "/";
   };
 
   const renderContent = () => {
@@ -42,6 +44,10 @@ const AdminPage = () => {
         return <FeaturedBooks />;
       case 'faq':
         return <AdminFaqPage />;
+      case 'libraries':
+        return <AdminLibraries />;
+      case 'services':
+        return <AdminServicesPage />;
       default:
         return <FeaturedEvents />;
     }
@@ -116,6 +122,17 @@ const AdminPage = () => {
               </span>
             </button>
             <button
+              onClick={() => setActivePage('libraries')}
+              className={`w-full flex items-center p-3 hover:bg-gray-100 rounded-lg transition-colors ${
+                activePage === 'libraries' ? 'bg-blue-50 text-blue-600' : ''
+              }`}
+            >
+              <Library size={20} className="min-w-[20px]" />
+              <span className={`ml-3 ${!isSidebarOpen && "lg:hidden xl:inline"}`}>
+                Libraries
+              </span>
+            </button>
+            <button
               onClick={() => setActivePage('faq')}
               className={`w-full flex items-center p-3 hover:bg-gray-100 rounded-lg transition-colors ${
                 activePage === 'faq' ? 'bg-blue-50 text-blue-600' : ''
@@ -124,6 +141,17 @@ const AdminPage = () => {
               <HelpCircle size={20} className="min-w-[20px]" />
               <span className={`ml-3 ${!isSidebarOpen && "lg:hidden xl:inline"}`}>
                 FAQ
+              </span>
+            </button>
+            <button
+              onClick={() => setActivePage('services')}
+              className={`w-full flex items-center p-3 hover:bg-gray-100 rounded-lg transition-colors ${
+                activePage === 'services' ? 'bg-blue-50 text-blue-600' : ''
+              }`}
+            >
+              <Cog size={20} className="min-w-[20px]" />
+              <span className={`ml-3 ${!isSidebarOpen && "lg:hidden xl:inline"}`}>
+               Services
               </span>
             </button>
           </nav>
@@ -137,6 +165,14 @@ const AdminPage = () => {
               <span className={`ml-3 ${!isSidebarOpen && "lg:hidden xl:inline"}`}>
                 Logout
               </span>
+            </button>
+            <button
+              className="w-full flex items-center p-3 hover:bg-gray-100 rounded-lg transition-colors"
+            >
+              <BookOpen size={20} className="min-w-[20px]" />
+              <a href="/" className={`ml-3 ${!isSidebarOpen && "lg:hidden xl:inline"}`}>
+                Back to landing page
+              </a>
             </button>
           </div>
         </div>

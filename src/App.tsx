@@ -20,6 +20,10 @@ import AdminFaqPage from './pages/AdminFaqPage';
 import { FaqChat } from './components/FaqChat';
 import BooksPage from "./pages/BooksPage"
 import BookDetailsPage from "./pages/BookDetailsPage"
+import UnitLibraries from "./pages/UnitLibraries";
+import AdminLibraries from './pages/AdminLibraries';
+import AdminServicesPage from './pages/AdminServices';
+import ServicesPage from './pages/LibraryServices';
 
 function App() {
   return (
@@ -38,6 +42,8 @@ function App() {
         <Route path="/events" element={<EventsPage />} />
         <Route path="/books" element={<BooksPage />} />
         <Route path="/books/:id" element={<BookDetailsPage />} />
+        <Route path="/unit-library/:id" element={<UnitLibraries/>}/>
+        <Route path="/services" element={<ServicesPage/>}/>
         {/* Protected admin routes */}
         <Route
           path="/admin"
@@ -68,6 +74,22 @@ function App() {
           element={
             <ProtectedRoute requiredRole="admin">
               <AdminFaqPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/libraries"
+          element={
+            <ProtectedRoute requiredRole="admin">
+              <AdminLibraries />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/services"
+          element={
+            <ProtectedRoute requiredRole="admin">
+              <AdminServicesPage/>
             </ProtectedRoute>
           }
         />

@@ -147,10 +147,10 @@ const LibraryHistory = () => {
               <div className="mt-12 flex justify-center text-black">
                 <motion.div
                   whileHover={{ scale: 1.05 }}
-                  className="inline-flex items-center px-6 py-3 bg-primary text-black rounded-full shadow-md hover:bg-primary/90 transition-colors"
+                  className="inline-flex items-center px-6 py-3 bg-primary  rounded-full shadow-md hover:bg-primary/90 transition-colors"
                 >
-                  <BookOpen className="mr-2 h-5 w-5 text-black" />
-                  <a href="/" className="text-black">Visit Our Library</a>
+                  <BookOpen className="mr-2 h-5 w-5 text-secondary" />
+                  <a href="/" className="text-secondary">Visit Our Library</a>
                 </motion.div>
               </div>
             </div>

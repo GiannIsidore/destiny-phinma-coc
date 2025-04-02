@@ -70,7 +70,7 @@ export const FaqChat = () => {
     return (
       <button
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-4 right-4 bg-[#0d542b] text-white p-4 rounded-full shadow-lg hover:bg-[#0a4121] transition-colors z-50"
+        className="fixed bottom-4 right-4 z-[9999] bg-[#0d542b] text-white p-4 rounded-full shadow-lg hover:bg-[#0a4121] transition-colors "
         title="Ask VIRLA"
       >
         <MessageCircle size={24} />
@@ -79,7 +79,7 @@ export const FaqChat = () => {
   }
 
   return (
-    <div className="fixed bottom-4 right-4 w-96 h-[600px] bg-white rounded-lg shadow-xl flex flex-col z-50">
+    <div className="fixed bottom-4 right-4 w-96 h-[600px] bg-white rounded-lg shadow-xl flex flex-col z-[9999]">
       {/* Header */}
       <div className="p-4 bg-[#0d542b] text-white rounded-t-lg flex justify-between items-center">
         <div className="flex items-center gap-2">

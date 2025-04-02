@@ -26,6 +26,7 @@ export interface BookData {
   book_img?: string | File;
   id?: number;
   img_id?: number;
+  author?: string;
 }
 
 export interface EventData {
@@ -49,6 +50,25 @@ export interface PersonData {
   img_id?: number;
 }
 
+export interface ServiceData {
+  service_name: string;
+  service_desc: string;
+  service_img?: string | File;
+  id?: number;
+}
+interface LibraryType {
+  library_id: number
+  library_name: string
+  library_description: string
+  sections?: Section[]
+}
+
+interface Section {
+  section_id: number
+  section_name: string
+  section_description: string
+  section_image: string | null
+}
 // Auth endpoints
 export const authAPI = {
   signup: (data: UserData) => api.post('user.php', { operation: 'signup', json: data }),
