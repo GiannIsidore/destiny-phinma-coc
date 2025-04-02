@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card"
 import { Header } from "../components/header"
 import { cn } from "../lib/utils"
 import { Footer } from "../components/footer"
+import { Info } from "lucide-react"
 interface Service {
   id: number
   service_name: string
@@ -68,15 +69,7 @@ const ServicesPage = () => {
     }
   }
 
-  const closeDetails = () => {
-    setShowDetails(false)
-    setTimeout(() => {
-      const servicesSection = document.getElementById("services-list")
-      if (servicesSection) {
-        servicesSection.scrollIntoView({ behavior: "smooth" })
-      }
-    }, 100)
-  }
+
 
   if (loading) {
     return (
