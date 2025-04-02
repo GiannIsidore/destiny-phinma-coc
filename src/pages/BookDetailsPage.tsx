@@ -168,9 +168,9 @@ const BookDetailsPage = () => {
 
   if (error || !book) {
     return (
-      <div className="min-h-screen bg-white">
+      <div className="min-h-screen bg-white ">
         <Header />
-        <div className="container mx-auto px-4 py-8">
+        <div className="container mx-auto px-4 mt-[10vh] py-8">
           <div className="max-w-3xl mx-auto text-center">
             <h1 className="text-2xl font-bold text-gray-900 mb-4">Error</h1>
             <p className="text-gray-600 mb-8">{error || "Book not found"}</p>
@@ -192,7 +192,7 @@ const BookDetailsPage = () => {
     <div className="min-h-screen bg-white">
       <Header />
 
-      <main className="container mx-auto px-4 py-8">
+      <main className="container mx-auto mt-[10vh] px-4 py-8">
         <div className="max-w-4xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -273,7 +273,7 @@ const BookDetailsPage = () => {
                         </div>
                       ) : null}
 
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 border-t pt-6">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {openLibraryData.publish_date && (
                           <div>
                             <p className="text-sm text-gray-500">Publication Date</p>
@@ -292,12 +292,12 @@ const BookDetailsPage = () => {
                             <p className="text-gray-900">{openLibraryData.number_of_pages}</p>
                           </div>
                         )}
-                        {book.bib_id && (
-                          <div>
-                            <p className="text-sm text-gray-500">Bib ID</p>
-                            <p className="text-gray-900">{book.bib_id}</p>
-                          </div>
-                        )}
+                        {/*{book.bib_id && (*/}
+                        {/*  <div>*/}
+                        {/*    <p className="text-sm text-gray-500">Bib ID</p>*/}
+                        {/*    <p className="text-gray-900">{book.bib_id}</p>*/}
+                        {/*  </div>*/}
+                        {/*)}*/}
                       </div>
 
                       {openLibraryData.subjects && openLibraryData.subjects.length > 0 && (

@@ -5,7 +5,27 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs"
 import { toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import { Award, BookOpen, GraduationCap, X } from "lucide-react"
-import { API_URL } from '../lib/config'
+import { API_URL } from "../lib/config"
+
+const styles = `
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 4px;
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.3);
+  }
+`
 
 interface ScholarProfile {
   id: string
@@ -32,18 +52,18 @@ const ProfileLayoutV3 = () => {
       setLoading(true)
       const [saResponse, hkResponse] = await Promise.all([
         fetch(`${API_URL}/sa.php?operation=getSA`),
-        fetch(`${API_URL}/hk.php?operation=getHK`)
+        fetch(`${API_URL}/hk.php?operation=getHK`),
       ])
 
       const saData = await saResponse.json()
       const hkData = await hkResponse.json()
 
-      if (saData.status === 'success' && hkData.status === 'success') {
+      if (saData.status === "success" && hkData.status === "success") {
         setSaData(saData.data)
         setHkData(hkData.data)
       }
     } catch (error) {
-      console.error('Error fetching scholars:', error)
+      console.error("Error fetching scholars:", error)
       setError("Failed to fetch scholar data")
       toast.error(`Failed to load scholar data,${error}`)
     } finally {
@@ -74,6 +94,17 @@ const ProfileLayoutV3 = () => {
     setSelectedImage(null)
     document.body.style.overflow = ""
   }
+
+  useEffect(() => {
+    // Add custom scrollbar styles
+    const styleElement = document.createElement("style")
+    styleElement.innerHTML = styles
+    document.head.appendChild(styleElement)
+
+    return () => {
+      document.head.removeChild(styleElement)
+    }
+  }, [])
 
   if (loading) {
     return (
@@ -154,21 +185,30 @@ const ProfileLayoutV3 = () => {
                     </div>
 
                     {/* Details */}
-                    <div className="flex flex-col justify-center text-center md:text-left p-2 sm:p-4">
-                  <span className="inline-flex items-center justify-center md:justify-start text-white px-3 sm:px-4 md:px-6 py-1 sm:py-2 rounded-full text-sm sm:text-base md:text-lg font-semibold bg-white/20 backdrop-blur-sm mb-3 sm:mb-4 md:mb-6 mx-auto md:mx-0 w-fit">
-                    <Award className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 mr-2" /> Student Assistant of the Month
-                  </span>
-                      <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-3 sm:mb-4 md:mb-6 leading-tight">
-                        {getFullName(saData)}
-                      </h2>
-                      <div className="flex items-center justify-center md:justify-start text-white/90 mb-4 sm:mb-6 md:mb-8 text-base sm:text-lg md:text-xl">
-                        <BookOpen className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 mr-2 sm:mr-3 text-primary" />
-                        <span className="bg-white/20 px-3 sm:px-4 md:px-6 py-2 sm:py-3 rounded-lg sm:rounded-xl backdrop-blur-sm">
-                      {saData.course}
+                    <div className="flex flex-col bg-white/10 backdrop-blur-md rounded-xl p-5 md:p-6">
+                      {/* Badge */}
+                      <div className="mb-4">
+                    <span className="inline-flex items-center bg-green-500/20 text-white px-3 py-1.5 rounded-full text-sm font-medium">
+                      <Award className="w-4 h-4 mr-2" /> Student Assistant of the Month
                     </span>
                       </div>
-                      <div className="text-white/90 text-sm sm:text-base md:text-lg overflow-y-auto max-h-[200px] sm:max-h-[250px] md:max-h-[300px] leading-relaxed bg-white/20 p-4 sm:p-6 md:p-8 rounded-xl sm:rounded-2xl backdrop-blur-sm">
-                        {saData.caption || "No description available"}
+
+                      {/* Name */}
+                      <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-3">{getFullName(saData)}</h2>
+
+                      {/* Course */}
+                      <div className="mb-5">
+                        <div className="flex items-center text-white/90">
+                          <BookOpen className="w-5 h-5 mr-2 text-green-400" />
+                          <span className="bg-white/25 px-3 py-1 rounded-md text-sm md:text-base">{saData.course}</span>
+                        </div>
+                      </div>
+
+                      {/* Description */}
+                      <div className="bg-white/25 rounded-lg p-4 border border-white/10">
+                        <div className="text-white/90 text-sm md:text-base overflow-y-auto max-h-[200px] md:max-h-[250px] leading-relaxed pr-2 custom-scrollbar">
+                          {saData.caption || "No description available"}
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -206,21 +246,30 @@ const ProfileLayoutV3 = () => {
                     </div>
 
                     {/* Details */}
-                    <div className="flex flex-col justify-center text-center md:text-left p-2 sm:p-4">
-                  <span className="inline-flex items-center justify-center md:justify-start text-white px-3 sm:px-4 md:px-6 py-1 sm:py-2 rounded-full text-sm sm:text-base md:text-lg font-semibold bg-white/20 backdrop-blur-sm mb-3 sm:mb-4 md:mb-6 mx-auto md:mx-0 w-fit">
-                    <GraduationCap className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 mr-2" /> Hawak Kamay Scholar of the Month
-                  </span>
-                      <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-3 sm:mb-4 md:mb-6 leading-tight">
-                        {getFullName(hkData)}
-                      </h2>
-                      <div className="flex items-center justify-center md:justify-start text-white/90 mb-4 sm:mb-6 md:mb-8 text-base sm:text-lg md:text-xl">
-                        <BookOpen className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 mr-2 sm:mr-3 text-primary" />
-                        <span className="bg-white/20 px-3 sm:px-4 md:px-6 py-2 sm:py-3 rounded-lg sm:rounded-xl backdrop-blur-sm">
-                      {hkData.course}
+                    <div className="flex flex-col bg-white/10 backdrop-blur-md rounded-xl p-5 md:p-6">
+                      {/* Badge */}
+                      <div className="mb-4">
+                    <span className="inline-flex items-center bg-green-500/30 text-white px-3 py-1.5 rounded-full text-sm font-medium">
+                      <GraduationCap className="w-4 h-4 mr-2" /> Hawak Kamay Scholar of the Month
                     </span>
                       </div>
-                      <div className="text-white/90 text-sm sm:text-base md:text-lg overflow-y-auto max-h-[200px] sm:max-h-[250px] md:max-h-[300px] leading-relaxed bg-white/20 p-4 sm:p-6 md:p-8 rounded-xl sm:rounded-2xl backdrop-blur-sm">
-                        {hkData.caption || "No description available"}
+
+                      {/* Name */}
+                      <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-3">{getFullName(hkData)}</h2>
+
+                      {/* Course */}
+                      <div className="mb-5">
+                        <div className="flex items-center text-white/90">
+                          <BookOpen className="w-5 h-5 mr-2 text-green-400" />
+                          <span className="bg-white/25 px-3 py-1 rounded-md text-sm md:text-base">{hkData.course}</span>
+                        </div>
+                      </div>
+
+                      {/* Description */}
+                      <div className="bg-white/25 rounded-lg p-4 border border-white/10">
+                        <div className="text-white/90 text-sm md:text-base overflow-y-auto max-h-[200px] md:max-h-[250px] leading-relaxed pr-2 custom-scrollbar">
+                          {hkData.caption || "No description available"}
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -266,3 +315,4 @@ const ProfileLayoutV3 = () => {
 }
 
 export default ProfileLayoutV3
+

@@ -303,7 +303,7 @@ const BooksPage = () => {
                       </h1>
                       <Link to={`/books/${featuredBook.id}`}>
                           <motion.button
-                            className="text-white bg-gray-800 rounded-4xl px-2 py-1 font-medium text-sm flex items-center"
+                            className="text-white bg-primary rounded hover:bg-primary-600 rounded-4xl px-2 py-1 font-medium text-sm flex items-center"
                             whileHover={{ x: 3 }}
                           >
                             View Details

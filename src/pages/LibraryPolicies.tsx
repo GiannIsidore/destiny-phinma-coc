@@ -24,7 +24,7 @@ const LibraryPolicies = () => {
             transition={{ duration: 0.5 }}
             className="max-w-4xl mx-auto"
           >
-            <h1 className="text-3xl font-bold mb-8 text-white">Library Policies</h1>
+            <h1 className="text-4xl font-bold mb-8 text-primary bg-secondary p-2 w-fit rounded">Library Policies</h1>
 
             {/* Eligibility Section */}
             <section className="mb-10">

@@ -18,7 +18,7 @@ const MissionVision = () => {
             transition={{ duration: 0.5 }}
             className="max-w-4xl mx-auto"
           >
-            <h1 className="text-3xl font-bold mb-8 text-primary">Vision & Mission</h1>
+            <h1 className="text-3xl bg-secondary rounded-lg p-2  font-bold mb-8 text-primary">Vision & Mission</h1>
 
             <div className="grid gap-8 md:grid-cols-2">
               <div className="bg-white p-8 rounded-lg shadow-md">

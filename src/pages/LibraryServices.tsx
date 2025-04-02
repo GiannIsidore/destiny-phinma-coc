@@ -24,22 +24,22 @@ const LibraryServices = () => {
             transition={{ duration: 0.5 }}
             className="max-w-4xl mx-auto z-[9999]"
           >
-            <h1 className="text-3xl font-bold mb-8 text-white">Library Services</h1>
+            <h1 className="text-5xl bg-secondary p-2 rounded font-bold mb-8 w-fit text-primary">Library Services</h1>
 
             <section className="mb-12">
-              <h2 className="text-2xl font-bold mb-6 text-white">UNIT LIBRARIES</h2>
+              <h2 className="text-2xl font-bold mb-6 text-primary bg-secondary p-2 w-fit shadow-2xl  rounded">UNIT LIBRARIES</h2>
 
               <div className="space-y-8">
                 <div className="bg-white p-6 rounded-lg shadow-md">
-                  <h3 className="text-xl font-bold mb-4 ">Basic Education Library</h3>
-                  <p className="text-gray-700">
+                  <h3 className="text-xl text-primary font-bold mb-4 ">Basic Education Library</h3>
+                  <p className="text-primary-700">
                     The Library is located in the Main Campus, intended for the use of the elementary and high school Students. However, it is allowed that a college student may use the collection by asking permission from the School Librarian.
                   </p>
                 </div>
 
                 <div className="bg-white p-6 rounded-lg shadow-md">
-                  <h3 className="text-xl font-bold mb-4 ">Puerto Campus Library</h3>
-                  <p className="text-gray-700">
+                  <h3 className="text-xl text-primary font-bold mb-4 ">Puerto Campus Library</h3>
+                  <p className="text-primary-700">
                     The library supports the information needs of the students, faculty and staff in the PHINMA-COC Puerto Campus. The use of the library is governed with rules and regulations that may differ from the Main Campus library.
                   </p>
                 </div>
@@ -47,14 +47,14 @@ const LibraryServices = () => {
             </section>
 
             <section>
-              <h2 className="text-2xl font-bold mb-6 text-white">OTHER LIBRARY SERVICES</h2>
+              <h2 className="text-2xl font-bold mb-6 text-primary bg-secondary p-2 w-fit shadow-2xl  rounded">OTHER LIBRARY SERVICES</h2>
 
               <div className="bg-white p-6 rounded-lg shadow-md">
-                <p className="mb-6 text-gray-700">
+                <p className="mb-6 text-primary-700">
                   At COC-PEN Library, our students, administrators, faculty and staff members as well as other visiting researchers are our primary concerns. We are here to assist you in finding resources to meet your research, educational, personal reading interests and other information needs.
                 </p>
 
-                <ul className="space-y-4 text-gray-700 list-disc pl-6">
+                <ul className="space-y-4 text-primary-700 list-disc pl-6">
                   <li>
                     For faculty members, we can help you find resources you need for class preparation and syllabi development. We encourage reservation for a particular book you use as textbook in your classes so we can determine our capacity to accommodate as well as set aside adequate number of copies for all your students.
                   </li>

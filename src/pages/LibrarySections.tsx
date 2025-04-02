@@ -24,7 +24,7 @@ const LibrarySections = () => {
             transition={{ duration: 0.5 }}
             className="max-w-4xl mx-auto"
           >
-            <h1 className="text-3xl font-bold mb-8 text-white">Library Sections</h1>
+            <h1 className="text-5xl font-bold mb-6 text-primary bg-secondary p-3 w-fit shadow-2xl  rounded">Library Sections</h1>
 
             <section className="mb-10">
               <div className="bg-white p-6 rounded-lg shadow-md prose max-w-none">
@@ -40,7 +40,7 @@ const LibrarySections = () => {
             {/* Circulation Desk */}
             <section className="mb-10">
               <div className="bg-white p-6 rounded-lg shadow-md">
-                <h2 className="text-2xl font-bold mb-4">CIRCULATION DESK</h2>
+                <h2 className="text-2xl text-primary font-bold mb-4">CIRCULATION DESK</h2>
                 <p className="mb-6">
                   Loaning out and/or returning of books is charged in here. Reserved books by the faculty and students are also shelved here.
                 </p>
@@ -56,7 +56,7 @@ const LibrarySections = () => {
             {/* Circulation Section */}
             <section className="mb-10">
               <div className="bg-white p-6 rounded-lg shadow-md">
-                <h2 className="text-2xl font-bold mb-4">CIRCULATION SECTION</h2>
+                <h2 className="text-2xl text-primary font-bold mb-4">CIRCULATION SECTION</h2>
                 <p className="mb-6">
                   The Circulation Section houses the collection in all subject areas as classified by the LC. These are the collections which can be loaned out by the students and faculty.
                 </p>
@@ -67,7 +67,7 @@ const LibrarySections = () => {
             {/* General Reference Section */}
             <section className="mb-10">
               <div className="bg-white p-6 rounded-lg shadow-md">
-                <h2 className="text-2xl font-bold mb-4">GENERAL REFERENCE SECTION</h2>
+                <h2 className="text-2xl text-primary font-bold mb-4">GENERAL REFERENCE SECTION</h2>
                 <p className="mb-6">
                   The Collection in this Section is composed of Handbooks and Manuals, Encyclopedias and Dictionaries, Thesauri, Almanacs, Maps and Globes, Directories, and Atlases. Access to these collections is limited for inside the library use only.
                 </p>
@@ -83,7 +83,7 @@ const LibrarySections = () => {
             {/* Graduate Studies Section */}
             <section className="mb-10">
               <div className="bg-white p-6 rounded-lg shadow-md">
-                <h2 className="text-2xl font-bold mb-4">GRADUATE STUDIES SECTION</h2>
+                <h2 className="text-2xl text-primary font-bold mb-4">GRADUATE STUDIES SECTION</h2>
                 <p className="mb-6">
                   Part of the collection for the Graduate Studies are books in the fields of Criminology, Education and Organizational Management.
                 </p>
@@ -99,7 +99,7 @@ const LibrarySections = () => {
             {/* Filipiniana Section */}
             <section className="mb-10">
               <div className="bg-white p-6 rounded-lg shadow-md">
-                <h2 className="text-2xl font-bold mb-4">FILIPINIANA SECTION</h2>
+                <h2 className="text-2xl text-primary font-bold mb-4">FILIPINIANA SECTION</h2>
                 <p className="mb-6">
                   COC-PEN library preserves collection on Philippines' cultural heritage. At this section are books published in the Philippines, books authored by Filipinos and books about the Philippines regardless of author and place of publication.
                 </p>
@@ -115,7 +115,7 @@ const LibrarySections = () => {
             {/* Periodical Section */}
             <section className="mb-10">
               <div className="bg-white p-6 rounded-lg shadow-md">
-                <h2 className="text-2xl font-bold mb-4">PERIODICAL SECTION</h2>
+                <h2 className="text-2xl text-primary font-bold mb-4">PERIODICAL SECTION</h2>
                 <p className="mb-6">
                   This section houses the periodical collection such as journals, magazines and newspapers. At present, COCPEN has subscribeb to Infotrac Custom 100, a database of 100 journal titles. Only bonafide Students, Faculty and Employees of COCPEN can access. To get the password, please see the librarians. Index of the periodicals are also integrated into the Athena system.
                 </p>
@@ -137,7 +137,7 @@ const LibrarySections = () => {
             {/* Electronic Resource Section */}
             <section className="mb-10">
               <div className="bg-white p-6 rounded-lg shadow-md">
-                <h2 className="text-2xl font-bold mb-4">ELECTRONIC RESOURCE SECTION</h2>
+                <h2 className="text-2xl text-primary font-bold mb-4">ELECTRONIC RESOURCE SECTION</h2>
                 <p className="mb-6">
                   Our library's electronic resources collection includes CDs, DVDs, and tranparencies in which access is exclusively for inside the library use only, except for faculty members for their use in the classroom.
                 </p>
@@ -153,7 +153,7 @@ const LibrarySections = () => {
             {/* Technical Section */}
             <section className="mb-10">
               <div className="bg-white p-6 rounded-lg shadow-md">
-                <h2 className="text-2xl font-bold mb-4">TECHNICAL SECTION</h2>
+                <h2 className="text-2xl text-primary font-bold mb-4">TECHNICAL SECTION</h2>
                 <p className="mb-6">
                   This Section is responsible for the Library's technical services management which include activities such as acquisition, cataloging, classification, preservation, conservation, repair and binding of library materials.
                 </p>
@@ -169,7 +169,7 @@ const LibrarySections = () => {
             {/* Basic Education Library */}
             <section className="mb-10">
               <div className="bg-white p-6 rounded-lg shadow-md">
-                <h2 className="text-2xl font-bold mb-4">BASIC EDUCATION LIBRARY</h2>
+                <h2 className="text-2xl text-primary font-bold mb-4">BASIC EDUCATION LIBRARY</h2>
                 <p className="mb-6">
                   The Library is intended for the use of the elementary and high school Students. However, it is allowed that a college student may use the collection by asking permission from the School Librarian.
                 </p>
