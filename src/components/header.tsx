@@ -1,15 +1,15 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { NavDropdown } from './nav-dropdown';
-import { Menu, X, Book } from 'lucide-react';
+import {Menu, X, Book, LogInIcon} from 'lucide-react';
 import { sessionManager } from '../utils/sessionManager';
 
 export const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const navigate = useNavigate();
-  const isAdmin = sessionManager.getRole() === 'admin';
-
+  const isLoggedIn = sessionManager.getSession() !== null;
+  const isAdmin = isLoggedIn && sessionManager.getRole() === 'admin';
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!mobileMenuOpen);
   };
@@ -82,6 +82,7 @@ export const Header = () => {
           </button>
 
           {/* Admin or User Actions */}
+
           {isAdmin ? (
             <div className="hidden md:flex items-center gap-4">
               <Link
@@ -112,6 +113,15 @@ export const Header = () => {
               >
                 FAQ
               </Link>
+              <Link
+                  to="/login"
+                  className="text-gray-600 flex items-center justify-center duration-300 transition-all hover:text-gray-900 group"
+              >
+                <LogInIcon className="w-5 h-5 font-thin" />
+                <span className="ml-0 w-0 overflow-hidden group-hover:ml-2 group-hover:w-auto transition-all duration-500">
+    login
+  </span>
+              </Link>
             </div>
           )}
         </div>
@@ -131,6 +141,7 @@ export const Header = () => {
             >
               Home
             </Link>
+
 
             <div className="py-2 border-t">
               <div className="font-medium text-gray-800 mb-2">About</div>
@@ -205,27 +216,41 @@ export const Header = () => {
                 ))}
               </div>
             </div>
+            {
+              isLoggedIn ? (
+                  isAdmin && (
+                      <div className="py-2 border-t">
+                        <Link
+                            to="/admin"
+                            className="block py-2 text-gray-600 hover:text-gray-900 font-medium"
+                            onClick={() => setMobileMenuOpen(false)}
+                        >
+                          Admin Panel
+                        </Link>
+                        <button
+                            onClick={() => {
+                              handleLogout();
+                              setMobileMenuOpen(false);
+                            }}
+                            className="block w-full text-left py-2 text-gray-600 hover:text-gray-900"
+                        >
+                          Logout
+                        </button>
+                      </div>
+                  )
+              ) : (
+                  <div className="py-2 border-t">
+                    <Link
+                        to="/login"
+                        className="block py-2 text-gray-600 hover:text-gray-900"
+                        onClick={() => setMobileMenuOpen(false)}
+                    >
+                      Login
+                    </Link>
+                  </div>
+              )
+            }
 
-            {isAdmin && (
-              <div className="py-2 border-t">
-                <Link
-                  to="/admin"
-                  className="block py-2 text-gray-600 hover:text-gray-900 font-medium"
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  Admin Panel
-                </Link>
-                <button
-                  onClick={() => {
-                    handleLogout();
-                    setMobileMenuOpen(false);
-                  }}
-                  className="block w-full text-left py-2 text-gray-600 hover:text-gray-900"
-                >
-                  Logout
-                </button>
-              </div>
-            )}
           </div>
         </div>
       )}
