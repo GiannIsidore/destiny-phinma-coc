@@ -23,7 +23,7 @@ export function EditBookDialog({ book, onSuccess }: EditBookDialogProps) {
   const [destinyUrl, setDestinyUrl] = useState(book.destiny_url)
   const [image, setImage] = useState<File | null>(null)
   const [imagePreview, setImagePreview] = useState(`data:image/jpeg;base64,${book.book_img}`)
-
+  const [author, setAuthor] = useState(book.author)
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -49,6 +49,7 @@ export function EditBookDialog({ book, onSuccess }: EditBookDialogProps) {
         destiny_url: destinyUrl,
         bib_id: bibId,
         img_id: book.img_id,
+        author,
       }
 
       if (image) {
@@ -98,7 +99,14 @@ export function EditBookDialog({ book, onSuccess }: EditBookDialogProps) {
               required
             />
           </div>
-
+          <div className="space-y-2">
+            <Label htmlFor="author">Author</Label>
+            <Input
+              id="author"
+              value={author}
+              onChange={(e) => setAuthor(e.target.value)}
+            />
+          </div>
           <div className="space-y-2">
             <Label htmlFor="destiny_url">Destiny URL</Label>
             <Input

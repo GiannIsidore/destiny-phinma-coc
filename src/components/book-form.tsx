@@ -17,7 +17,7 @@ export function BookForm({ isAuthenticated, editingBook, onSuccess }: BookFormPr
   const [preview, setPreview] = useState('')
   const [file, setFile] = useState<File | null>(null)
   const [loading, setLoading] = useState(false)
-
+  const [author, setAuthor] = useState('')
   useEffect(() => {
     if (editingBook) {
       setTitle(editingBook.title)
@@ -112,7 +112,16 @@ export function BookForm({ isAuthenticated, editingBook, onSuccess }: BookFormPr
           onChange={(e) => setTitle(e.target.value)}
         />
       </div>
+    <div className="space-y-2">
+      <label className="block text-sm font-medium">Author</label>
+      <input
+        className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+        placeholder="Enter author name"
+        value={author}
+        onChange={(e) => setAuthor(e.target.value)}
+      />
 
+    </div>
       <div className="space-y-2">
         <label className="block text-sm font-medium">Destiny URL</label>
         <input

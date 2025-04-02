@@ -85,13 +85,14 @@ class Book
 
       // Insert book into books_tble
       $stmt = $this->conn->prepare("
-        INSERT INTO books_tble (title, destiny_url, added_at, bib_id, img_id)
+        INSERT INTO books_tble (title, destiny_url, added_at, bib_id, img_id, author)
         VALUES (:title, :destiny_url, NOW(), :bib_id, :img_id)
       ");
       $stmt->bindParam(':title', $data['title'], PDO::PARAM_STR);
       $stmt->bindParam(':destiny_url', $data['destiny_url'], PDO::PARAM_STR);
       $stmt->bindParam(':bib_id', $data['bib_id'], PDO::PARAM_STR);
       $stmt->bindParam(':img_id', $imgId, PDO::PARAM_INT);
+      $stmt->bindParam(':author', $data['author'], PDO::PARAM_STR);
       $stmt->execute();
 
       $this->conn->commit();
@@ -119,12 +120,13 @@ class Book
       // Update book in books_tble
       $stmt = $this->conn->prepare("
         UPDATE books_tble
-        SET title = :title, destiny_url = :destiny_url, bib_id = :bib_id
+        SET title = :title, destiny_url = :destiny_url, bib_id = :bib_id, author = :author
         WHERE id = :id
       ");
       $stmt->bindParam(':title', $data['title'], PDO::PARAM_STR);
       $stmt->bindParam(':destiny_url', $data['destiny_url'], PDO::PARAM_STR);
       $stmt->bindParam(':bib_id', $data['bib_id'], PDO::PARAM_STR);
+      $stmt->bindParam(':author', $data['author'], PDO::PARAM_STR);
       $stmt->bindParam(':id', $data['id'], PDO::PARAM_INT);
       $stmt->execute();
 
