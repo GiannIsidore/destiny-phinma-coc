@@ -91,10 +91,10 @@ const ServicesPage = () => {
   }
 
   return (
-    <div className="container mx-auto p-4 md:p-8">
+    <div className="flex flex-col min-h-screen">
       <Header />
 
-      <div className="mt-12">
+      <div className="mt-[15vh] mb-[15vh]">
         <div className="text-left mb-8">
           <h1 className="text-3xl font-bold mb-4">Our Services</h1>
           <p className="text-gray-600 max-w-2xl ">Click on a service to learn more about what we offer</p>

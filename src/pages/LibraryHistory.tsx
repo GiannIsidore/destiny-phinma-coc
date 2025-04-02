@@ -11,7 +11,7 @@ const LibraryHistory = () => {
       <Header />
 
       {/* Hero Section with New Image */}
-      <div className="relative w-full h-[50vh] md:h-[60vh] overflow-hidden">
+      <div className="relative mt-[15vh]  w-full h-[50vh] md:h-[60vh] overflow-hidden">
         <div className="absolute inset-0 bg-black/40 z-10" />
         <img
           src="/foundingmemlib.jpg"
