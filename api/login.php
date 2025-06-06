@@ -1,6 +1,6 @@
 <?php
-include_once 'connection.php';
-include_once 'cors_headers.php';
+include 'connection.php';
+include 'cors_headers.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $data = json_decode(file_get_contents("php://input"), true);

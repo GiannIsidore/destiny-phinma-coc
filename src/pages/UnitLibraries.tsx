@@ -22,13 +22,13 @@ interface UnitLibraryResponse {
   library_id: string
   library_name: string
   library_description: string
-  sections: LibrarySection[]
-}
-
-const UnitLibraries = () => {
-  const { id } = useParams<{ id: string }>()
-  const [libraryData, setLibraryData] = useState<UnitLibraryResponse | null>(null)
-  const [isLoading, setIsLoading] = useState(true)
+    sections: LibrarySection[]
+  }
+  
+  const UnitLibraries = () => {
+    const { id } = useParams<{ id: string }>()
+    const [libraryData, setLibraryData] = useState<UnitLibraryResponse | null>(null)
+    const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [activeTab, setActiveTab] = useState("about")
 

@@ -65,9 +65,7 @@ export const LoginPage = () => {
     try {
       const response = await fetch(`${BASE_URL}api/login.php`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        credentials: "include",
         body: JSON.stringify(formData),
       })
 
