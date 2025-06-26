@@ -22,6 +22,7 @@ export function BookForm({ isAuthenticated, editingBook, onSuccess }: BookFormPr
     if (editingBook) {
       setTitle(editingBook.title)
       setDestinyUrl(editingBook.destiny_url)
+      setAuthor(editingBook.author ?? '') // <-- Add this line
       setPreview(`data:image/jpeg;base64,${editingBook.book_img}`)
     }
   }, [editingBook])
@@ -60,6 +61,7 @@ export function BookForm({ isAuthenticated, editingBook, onSuccess }: BookFormPr
     try {
       const bookData: BookData = {
         title,
+        author, // <-- Add this line
         destiny_url: destinyUrl,
         bib_id: bibId,
         ...(editingBook && { id: editingBook.id, img_id: editingBook.img_id }),
@@ -87,6 +89,7 @@ export function BookForm({ isAuthenticated, editingBook, onSuccess }: BookFormPr
 
       // Reset form
       setTitle('')
+      setAuthor('') // <-- Reset author field
       setDestinyUrl('')
       setPreview('')
       setFile(null)

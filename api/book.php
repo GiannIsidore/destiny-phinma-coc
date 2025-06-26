@@ -86,7 +86,7 @@ class Book
       // Insert book into books_tble
       $stmt = $this->conn->prepare("
         INSERT INTO books_tble (title, destiny_url, added_at, bib_id, img_id, author)
-        VALUES (:title, :destiny_url, NOW(), :bib_id, :img_id)
+        VALUES (:title, :destiny_url, NOW(), :bib_id, :img_id, :author)
       ");
       $stmt->bindParam(':title', $data['title'], PDO::PARAM_STR);
       $stmt->bindParam(':destiny_url', $data['destiny_url'], PDO::PARAM_STR);
