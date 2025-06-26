@@ -8,6 +8,7 @@ import { booksAPI } from '../services/api'
 import type { BookData } from '../services/api'
 import { toast } from 'react-toastify'
 import { EditBookDialog } from '../components/edit-book-dialog'
+import { sessionManager } from '../utils/sessionManager'
 
 const FeaturedBooks = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
@@ -33,8 +34,11 @@ const FeaturedBooks = () => {
   }, [])
 
   useEffect(() => {
-    const authStatus = localStorage.getItem('isAdmin')
-    if (authStatus) setIsAuthenticated(true)
+    if (sessionManager.isAuthenticated() && sessionManager.getRole() === 'admin') {
+      setIsAuthenticated(true)
+    } else {
+      setIsAuthenticated(false)
+    }
   }, [])
 
   useEffect(() => {

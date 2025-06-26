@@ -9,6 +9,7 @@ import { toast } from 'react-toastify'
 import { EditEventDialog } from '../components/edit-event-dialog'
 import type { EventData } from '../services/api'
 import { API_URL } from '../lib/config'
+import { sessionManager } from '../utils/sessionManager'
 
 interface Event extends EventData {
   created_at: string
@@ -61,8 +62,11 @@ const EventsAdmin = () => {
   }, [])
 
   useEffect(() => {
-    const authStatus = localStorage.getItem('isAdmin')
-    if (authStatus) setIsAuthenticated(true)
+    if (sessionManager.isAuthenticated() && sessionManager.getRole() === 'admin') {
+      setIsAuthenticated(true)
+    } else {
+      setIsAuthenticated(false)
+    }
   }, [])
 
   useEffect(() => {

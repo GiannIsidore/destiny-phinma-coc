@@ -1,0 +1,34 @@
+<!-- <!DOCTYPE html>
+<html>
+<head>
+    <title>Debug Session Storage</title>
+</head>
+<body>
+    <h1>Session Storage Debug</h1>
+    <div id="session-info"></div>
+    
+    <script>
+        function debugSession() {
+            const sessionData = sessionStorage.getItem('userSession');
+            const div = document.getElementById('session-info');
+            
+            if (!sessionData) {
+                div.innerHTML = '<p>No session data found in sessionStorage</p>';
+                return;
+            }
+            
+            div.innerHTML = `
+                <h2>Raw Session Data:</h2>
+                <pre>${sessionData}</pre>
+                
+                <h2>Session Storage Keys:</h2>
+                <ul>
+                    ${Object.keys(sessionStorage).map(key => `<li>${key}: ${sessionStorage.getItem(key)}</li>`).join('')}
+                </ul>
+            `;
+        }
+        
+        debugSession();
+    </script>
+</body>
+</html> -->

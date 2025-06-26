@@ -20,6 +20,7 @@ import {
 import { Card, CardContent, CardFooter, CardHeader, CardTitle, CardDescription } from "../components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../components/ui/tabs"
 import { Badge } from "../components/ui/badge"
+import { sessionManager } from '../utils/sessionManager'
 
 interface LibraryType {
   library_id: number
@@ -101,8 +102,11 @@ const AdminLibraries = () => {
   }, [])
 
   useEffect(() => {
-    const authStatus = localStorage.getItem("isAdmin")
-    setIsAuthenticated(!!authStatus)
+    if (sessionManager.isAuthenticated() && sessionManager.getRole() === 'admin') {
+      setIsAuthenticated(true)
+    } else {
+      setIsAuthenticated(false)
+    }
     fetchLibraries()
   }, [fetchLibraries])
 

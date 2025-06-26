@@ -14,6 +14,7 @@ import { Loader2, Upload, X, Pencil, Plus } from "lucide-react"
 import { cn } from "../lib/utils"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "../components/ui/dialog"
 import { API_URL } from '../lib/config'
+import { sessionManager } from '../utils/sessionManager'
 
 interface ScholarForm {
   fname: string
@@ -88,19 +89,35 @@ function ScholarEditDialog({
 
   // Reset form when dialog opens with new scholar data
   useEffect(() => {
-    if (open && scholar) {
-      setForm({
-        fname: scholar.fname,
-        lname: scholar.lname,
-        mname: scholar.mname,
-        suffix: scholar.suffix,
-        course: scholar.course,
-        caption: scholar.caption,
-        prevCaption: "",
-        month: scholar.month,
-        image: null,
-        imagePreview: scholar.imgurl,
-      })
+    if (open) {
+      if (fileInputRef.current) fileInputRef.current.value = '';
+      if (scholar) {
+        setForm({
+          fname: scholar.fname,
+          lname: scholar.lname,
+          mname: scholar.mname,
+          suffix: scholar.suffix,
+          course: scholar.course,
+          caption: scholar.caption,
+          prevCaption: "",
+          month: scholar.month,
+          image: null,
+          imagePreview: scholar.imgurl,
+        })
+      } else {
+        setForm({
+          fname: "",
+          lname: "",
+          mname: "",
+          suffix: "",
+          course: "",
+          caption: "",
+          prevCaption: "",
+          month: new Date().toISOString().split('T')[0],
+          image: null,
+          imagePreview: "",
+        })
+      }
     }
   }, [open, scholar])
 
@@ -171,6 +188,7 @@ function ScholarEditDialog({
   }
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    console.log('File input changed', e.target.files);
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0]
 
@@ -190,7 +208,7 @@ function ScholarEditDialog({
     if (form.imagePreview && form.imagePreview.startsWith('blob:')) {
       URL.revokeObjectURL(form.imagePreview)
     }
-
+    if (fileInputRef.current) fileInputRef.current.value = '';
     setForm({
       ...form,
       image: null,
@@ -199,7 +217,10 @@ function ScholarEditDialog({
   }
 
   const handleImageClick = () => {
-    fileInputRef.current?.click();
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+      fileInputRef.current.click();
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -308,13 +329,64 @@ function ScholarEditDialog({
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-6">
-          <Input
+          <input
             ref={fileInputRef}
             type="file"
             accept="image/*"
             onChange={handleImageChange}
-            className="hidden"
+            style={{ display: 'none' }}
           />
+
+          <div className="space-y-4">
+            <Label>Profile Image</Label>
+            {!form.imagePreview ? (
+              <div className="border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-lg p-6 text-center">
+                <div className="flex flex-col items-center justify-center gap-2">
+                  <Upload className="h-8 w-8 text-gray-400" />
+                  <p className="text-sm text-gray-500 dark:text-gray-400">
+                    Drag and drop an image, or click to browse
+                  </p>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={handleImageClick}
+                  >
+                    Select Image
+                  </Button>
+                </div>
+              </div>
+            ) : (
+              <div className="relative flex flex-col items-center">
+                <div className="relative w-48 h-48 rounded-full overflow-hidden border-4 border-primary/20">
+                  <img
+                    src={form.imagePreview}
+                    alt="Scholar preview"
+                    className="object-cover w-full h-full"
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement;
+                      target.onerror = null;
+                      target.src = "/placeholder.png";
+                    }}
+                  />
+                </div>
+                <div className="flex gap-2 mt-4">
+                  <Button type="button" variant="outline" size="sm" onClick={removeImage}>
+                    <X className="h-4 w-4 mr-2" />
+                    Remove Image
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={handleImageClick}
+                  >
+                    <Upload className="h-4 w-4 mr-2" />
+                    Change Image
+                  </Button>
+                </div>
+              </div>
+            )}
+          </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-2">
@@ -417,57 +489,6 @@ function ScholarEditDialog({
             )} */}
           </div>
 
-          <div className="space-y-4">
-            <Label>Profile Image</Label>
-
-            {!form.imagePreview ? (
-              <div className="border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-lg p-6 text-center">
-                <div className="flex flex-col items-center justify-center gap-2">
-                  <Upload className="h-8 w-8 text-gray-400" />
-                  <p className="text-sm text-gray-500 dark:text-gray-400">
-                    Drag and drop an image, or click to browse
-                  </p>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={handleImageClick}
-                  >
-                    Select Image
-                  </Button>
-                </div>
-              </div>
-            ) : (
-              <div className="relative flex flex-col items-center">
-                <div className="relative w-48 h-48 rounded-full overflow-hidden border-4 border-primary/20">
-                  <img
-                    src={form.imagePreview || "/placeholder.svg"}
-                    alt="Scholar preview"
-                    className="object-cover w-full h-full"
-                    onError={(e) => {
-                      console.error('Image failed to load:', e);
-                      (e.target as HTMLImageElement).src = '/placeholder.jpg';
-                    }}
-                  />
-                </div>
-                <div className="flex gap-2 mt-4">
-                  <Button type="button" variant="outline" size="sm" onClick={removeImage}>
-                    <X className="h-4 w-4 mr-2" />
-                    Remove Image
-                  </Button>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    onClick={handleImageClick}
-                  >
-                    <Upload className="h-4 w-4 mr-2" />
-                    Change Image
-                  </Button>
-                </div>
-              </div>
-            )}
-          </div>
-
           <div className="flex justify-end pt-4">
             <Button
               type="button"
@@ -526,12 +547,13 @@ function ScholarDetailCard({
           <div className="flex flex-col md:flex-row gap-6">
             <div className="relative w-48 h-48 rounded-full overflow-hidden border-4 border-primary/20 mx-auto md:mx-0">
               <img
-                src={scholar.imgurl || "/placeholder.svg"}
+                src={scholar.imgurl}
                 alt={`${scholar.fname} ${scholar.lname}`}
                 className="object-cover w-full h-full"
                 onError={(e) => {
-                  console.error('Image failed to load:', e);
-                  (e.target as HTMLImageElement).src = '/placeholder.jpg';
+                  const target = e.target as HTMLImageElement;
+                  target.onerror = null;
+                  target.src = "/placeholder.png";
                 }}
               />
             </div>

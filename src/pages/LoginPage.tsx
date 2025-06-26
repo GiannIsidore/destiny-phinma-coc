@@ -1,65 +1,65 @@
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
 
-import { useState, useEffect } from "react"
-import { useNavigate } from "react-router-dom"
-import { toast } from "react-toastify"
-import { sessionManager } from "../utils/sessionManager"
-import { Eye, EyeOff } from "lucide-react"
-import { BASE_URL } from '../lib/config';
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { sessionManager } from "../utils/sessionManager";
+import { Eye, EyeOff } from "lucide-react";
+import { BASE_URL } from "../lib/config";
 
 export const LoginPage = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     school_id: "",
     password: "",
-  })
-  const [loading, setLoading] = useState(false)
+  });
+  const [loading, setLoading] = useState(false);
 
   // Password visibility state
-  const [showPassword, setShowPassword] = useState(false)
+  const [showPassword, setShowPassword] = useState(false);
 
   // Captcha state
   const [captcha, setCaptcha] = useState({
     num1: 0,
     num2: 0,
     answer: "",
-  })
+  });
 
   // Generate captcha on component mount
   useEffect(() => {
-    generateCaptcha()
-  }, [])
+    generateCaptcha();
+  }, []);
 
   // Generate random numbers for captcha
   const generateCaptcha = () => {
-    const num1 = Math.floor(Math.random() * 10) + 1
-    const num2 = Math.floor(Math.random() * 10) + 1
-    setCaptcha({ num1, num2, answer: "" })
-  }
+    const num1 = Math.floor(Math.random() * 10) + 1;
+    const num2 = Math.floor(Math.random() * 10) + 1;
+    setCaptcha({ num1, num2, answer: "" });
+  };
 
   // Reset form
   const resetForm = () => {
-    setFormData({ school_id: "", password: "" })
-    generateCaptcha()
-  }
+    setFormData({ school_id: "", password: "" });
+    generateCaptcha();
+  };
 
   // Validate captcha answer
   const validateCaptcha = () => {
-    return Number.parseInt(captcha.answer) === captcha.num1 + captcha.num2
-  }
+    return Number.parseInt(captcha.answer) === captcha.num1 + captcha.num2;
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setLoading(true)
+    e.preventDefault();
+    setLoading(true);
 
     // Validate captcha before proceeding
     if (!validateCaptcha()) {
-      toast.error("Incorrect captcha answer. Please try again.")
-      generateCaptcha()
-      setLoading(false)
-      return
+      toast.error("Incorrect captcha answer. Please try again.");
+      generateCaptcha();
+      setLoading(false);
+      return;
     }
 
     try {
@@ -67,14 +67,14 @@ export const LoginPage = () => {
         method: "POST",
         credentials: "include",
         body: JSON.stringify(formData),
-      })
+      });
 
-      const data = await response.json()
+      const data = await response.json();
 
       if (data.status === "success") {
         sessionManager.setSession({
           ...data.user,
-          isAuthenticated: true
+          isAuthenticated: true,
         });
         toast.success("Login successful!");
         resetForm();
@@ -84,13 +84,13 @@ export const LoginPage = () => {
         generateCaptcha();
       }
     } catch (error) {
-      toast.error("An error occurred during login")
-      console.error(error)
-      generateCaptcha()
+      toast.error("An error occurred during login");
+      console.error(error);
+      generateCaptcha();
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <div
@@ -104,18 +104,25 @@ export const LoginPage = () => {
       <div className="absolute inset-0 bg-black/50"></div>
 
       <div className="bg-white p-8 rounded-lg shadow-xl w-full max-w-md z-10 backdrop-filter backdrop-blur-sm bg-opacity-90">
-        <h1 className="text-3xl font-bold mb-6 text-center text-gray-800">Admin Login</h1>
+        <h1 className="text-3xl font-bold mb-6 text-center text-gray-800">
+          Admin Login
+        </h1>
 
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
-            <label htmlFor="school_id" className="block text-sm font-medium text-gray-700 mb-1">
+            <label
+              htmlFor="school_id"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
               School ID
             </label>
             <input
               id="school_id"
               type="text"
               value={formData.school_id}
-              onChange={(e) => setFormData({ ...formData, school_id: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, school_id: e.target.value })
+              }
               className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#0d542b] focus:border-[#0d542b] transition-colors"
               required
               disabled={loading}
@@ -123,7 +130,10 @@ export const LoginPage = () => {
           </div>
 
           <div>
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
+            <label
+              htmlFor="password"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
               Password
             </label>
             <div className="relative">
@@ -131,7 +141,9 @@ export const LoginPage = () => {
                 id="password"
                 type={showPassword ? "text" : "password"}
                 value={formData.password}
-                onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, password: e.target.value })
+                }
                 className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#0d542b] focus:border-[#0d542b] transition-colors pr-10"
                 required
                 disabled={loading}
@@ -149,14 +161,19 @@ export const LoginPage = () => {
           </div>
 
           <div>
-            <label htmlFor="captcha" className="block text-sm font-medium text-gray-700 mb-1">
+            <label
+              htmlFor="captcha"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
               Security Check: What is {captcha.num1} + {captcha.num2}?
             </label>
             <input
               id="captcha"
               type="text"
               value={captcha.answer}
-              onChange={(e) => setCaptcha({ ...captcha, answer: e.target.value })}
+              onChange={(e) =>
+                setCaptcha({ ...captcha, answer: e.target.value })
+              }
               className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#0d542b] focus:border-[#0d542b] transition-colors"
               required
               placeholder="Enter the sum"
@@ -178,7 +195,7 @@ export const LoginPage = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default LoginPage
+export default LoginPage;

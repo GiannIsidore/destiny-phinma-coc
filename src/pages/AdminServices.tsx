@@ -14,6 +14,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '../components/ui/dialog'
+import { sessionManager } from '../utils/sessionManager'
 
 interface Service {
   id: number
@@ -55,8 +56,11 @@ const AdminServicesPage = () => {
   }
 
   useEffect(() => {
-    const authStatus = localStorage.getItem('isAdmin')
-    setIsAuthenticated(!!authStatus)
+    if (sessionManager.isAuthenticated() && sessionManager.getRole() === 'admin') {
+      setIsAuthenticated(true)
+    } else {
+      setIsAuthenticated(false)
+    }
     fetchServices()
   }, [])
 

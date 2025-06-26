@@ -8,6 +8,8 @@ import { eventsAPI } from '../services/api'
 import type { EventData } from '../services/api'
 import { toast } from 'react-toastify'
 import { EditEventDialog } from '../components/edit-event-dialog'
+import { sessionManager } from '../utils/sessionManager'
+
 const FeaturedEvents = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [events, setEvents] = useState<EventData[]>([])
@@ -29,8 +31,11 @@ const FeaturedEvents = () => {
   },[])
 
   useEffect(() => {
-    const authStatus = localStorage.getItem('isAdmin')
-    if (authStatus) setIsAuthenticated(true)
+    if (sessionManager.isAuthenticated() && sessionManager.getRole() === 'admin') {
+      setIsAuthenticated(true)
+    } else {
+      setIsAuthenticated(false)
+    }
   }, [])
 
   useEffect(() => {

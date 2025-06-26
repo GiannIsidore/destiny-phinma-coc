@@ -24,6 +24,7 @@ import UnitLibraries from "./pages/UnitLibraries";
 import AdminLibraries from './pages/AdminLibraries';
 import AdminServicesPage from './pages/AdminServices';
 import ServicesPage from './pages/LibraryServices';
+// import { SessionDebugger } from './components/SessionDebugger';
 
 function App() {
   return (
@@ -97,6 +98,7 @@ function App() {
         {/* Catch all route */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
+      {/* <SessionDebugger /> */}
       <FaqChat />
       <ToastContainer />
     </Router>

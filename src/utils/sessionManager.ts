@@ -24,15 +24,24 @@ class SessionManager {
     try {
       const bytes = CryptoJS.AES.decrypt(encryptedData, SECRET_KEY);
       const decryptedString = bytes.toString(CryptoJS.enc.Utf8);
-      return JSON.parse(decryptedString);
-    } catch {
+      if (!decryptedString) {
+        console.error('SessionManager: Failed to decrypt session data - empty decrypted string');
+        return null;
+      }
+      const parsed = JSON.parse(decryptedString);
+      console.log('SessionManager: Successfully decrypted session:', parsed);
+      return parsed;
+    } catch (error) {
+      console.error('SessionManager: Failed to decrypt session data:', error);
       return null;
     }
   }
 
   setSession(data: UserSession): void {
+    console.log('SessionManager: Setting session with data:', data);
     const encryptedData = this.encrypt(data);
     sessionStorage.setItem('userSession', encryptedData);
+    console.log('SessionManager: Session stored in sessionStorage');
   }
 
   getSession(): UserSession | null {
@@ -49,12 +58,16 @@ class SessionManager {
 
   isAuthenticated(): boolean {
     const session = this.getSession();
-    return !!session?.isAuthenticated;
+    const isAuth = !!session?.isAuthenticated;
+    console.log('SessionManager: isAuthenticated check:', { session, isAuth });
+    return isAuth;
   }
 
   getRole(): string {
     const session = this.getSession();
-    return session?.status === 1 ? 'admin' : 'user';
+    const role = session?.status === 1 ? 'admin' : 'user';
+    console.log('SessionManager: getRole check:', { session, status: session?.status, role });
+    return role;
   }
 
   getUserId(): number | null {
