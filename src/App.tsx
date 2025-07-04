@@ -1,7 +1,6 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
-
 import LandingPage from './pages/LandingPage';
 import AdminPage from './pages/AdminPage';
 import FeaturedBooks from './pages/FeaturedBooks';
@@ -18,12 +17,12 @@ import LibraryPolicies from './pages/LibraryPolicies';
 import EventsPage from './pages/EventsPage';
 import AdminFaqPage from './pages/AdminFaqPage';
 import { FaqChat } from './components/FaqChat';
-import BooksPage from "./pages/BooksPage"
 import BookDetailsPage from "./pages/BookDetailsPage"
 import UnitLibraries from "./pages/UnitLibraries";
 import AdminLibraries from './pages/AdminLibraries';
 import AdminServicesPage from './pages/AdminServices';
 import ServicesPage from './pages/LibraryServices';
+import BooksPage from './pages/BooksPage';
 // import { SessionDebugger } from './components/SessionDebugger';
 
 function App() {

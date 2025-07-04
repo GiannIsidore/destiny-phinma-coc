@@ -18,19 +18,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    if ($user && password_verify($data['password'], $user['password'])) {
-      // Remove password from response
-      unset($user['password']);
+    if ($user) {
+      // Check if password is hashed or plain text
+      $password_correct = false;
+      
+      // Try password_verify first (for hashed passwords)
+      if (password_verify($data['password'], $user['password'])) {
+        $password_correct = true;
+      }
+      // Fallback to plain text comparison (for unhashed passwords)
+      elseif ($data['password'] === $user['password']) {
+        $password_correct = true;
+      }
 
-      echo json_encode([
-        'status' => 'success',
-        'message' => 'Login successful',
-        'user' => $user
-      ]);
+      if ($password_correct) {
+        // Remove password from response
+        unset($user['password']);
+
+        echo json_encode([
+          'status' => 'success',
+          'message' => 'Login successful',
+          'user' => $user
+        ]);
+      } else {
+        echo json_encode([
+          'status' => 'error',
+          'message' => 'Invalid credentials'
+        ]);
+      }
     } else {
       echo json_encode([
         'status' => 'error',
-        'message' => 'Invalid credentials'
+        'message' => 'User not found'
       ]);
     }
   } catch (PDOException $e) {
