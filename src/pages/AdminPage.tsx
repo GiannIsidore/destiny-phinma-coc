@@ -17,21 +17,28 @@ import {
   Library,
   Cog,
   FileText,
+  ChevronLeft,
+  ChevronRight,
+  Home,
 } from "lucide-react";
 import AdminServicesPage from "./AdminServices";
+import { motion, AnimatePresence } from "framer-motion";
 
 const AdminPage = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
-  const [activePage, setActivePage] = useState("events");
+  const [activePage, setActivePage] = useState('events');
   const user = sessionManager.getSession();
 
   useEffect(() => {
     const checkMobile = () => {
-      setIsMobile(window.innerWidth < 1024);
-      if (window.innerWidth < 1024) {
+      const mobile = window.innerWidth < 1024;
+      setIsMobile(mobile);
+      // On mobile, start with sidebar closed
+      if (mobile) {
         setIsSidebarOpen(false);
       } else {
+        // On desktop, start with sidebar open
         setIsSidebarOpen(true);
       }
     };
@@ -48,213 +55,261 @@ const AdminPage = () => {
 
   const renderContent = () => {
     switch (activePage) {
-      case "events":
+      case 'events':
         return <FeaturedEvents />;
-      case "scholars":
+      case 'scholars':
         return <ScholarsAdmin />;
-      case "books":
+      case 'books':
         return <FeaturedBooks />;
-      case "faq":
+      case 'faq':
         return <AdminFaqPage />;
-      case "libraries":
+      case 'libraries':
         return <AdminLibraries />;
-      case "services":
+      case 'services':
         return <AdminServicesPage />;
-      case "content":
+      case 'content':
         return <AdminContent />;
       default:
         return <FeaturedEvents />;
     }
   };
 
+  const menuItems = [
+    { key: 'events', label: 'Events', icon: Calendar },
+    { key: 'scholars', label: 'Scholars', icon: Users },
+    { key: 'books', label: 'Books', icon: BookOpen },
+    { key: 'faq', label: 'FAQ', icon: HelpCircle },
+    { key: 'libraries', label: 'Libraries', icon: Library },
+    { key: 'services', label: 'Services', icon: Cog },
+    { key: 'content', label: 'Content', icon: FileText },
+  ];
+
+  const sidebarWidth = isSidebarOpen ? 'w-72' : 'w-16';
+
   return (
-    <div className="flex min-h-screen bg-gray-50">
+    <div className="flex min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
       {/* Mobile Overlay */}
-      {isMobile && isSidebarOpen && (
-        <div
-          className="fixed inset-0 bg-black/40 lg:hidden z-30"
-          onClick={() => setIsSidebarOpen(false)}
-        />
-      )}
+      <AnimatePresence>
+        {isMobile && isSidebarOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/50 lg:hidden z-40"
+            onClick={() => setIsSidebarOpen(false)}
+          />
+        )}
+      </AnimatePresence>
 
       {/* Sidebar */}
-      <aside
+      <motion.aside
+        initial={false}
+        animate={{
+          width: isMobile ? (isSidebarOpen ? 288 : 0) : (isSidebarOpen ? 288 : 64),
+          x: isMobile && !isSidebarOpen ? -288 : 0
+        }}
+        transition={{ duration: 0.3, ease: "easeInOut" }}
         className={`
-          fixed lg:relative
-          ${isSidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}
-          w-72 lg:w-20 xl:w-72 bg-white shadow-xl transition-all duration-300 z-40
-          h-screen flex flex-col
+          ${isMobile ? 'fixed' : 'relative'}
+          bg-white shadow-xl z-50 h-screen flex flex-col overflow-hidden
+          border-r border-gray-200
         `}
       >
-        <div className="p-4 h-full flex flex-col border-r border-gray-200">
-          <div className="flex items-center justify-between mb-8 px-2">
-            {isSidebarOpen ? (
-              <h2 className="font-bold text-xl text-gray-800">Admin Panel</h2>
-            ) : (
-              <div className="w-8 h-8 bg-blue-500 rounded-lg" />
+        {/* Sidebar Header */}
+        <div className="p-4 border-b border-gray-200">
+          <div className="flex items-center justify-between">
+            <motion.div
+              initial={false}
+              animate={{ opacity: isSidebarOpen ? 1 : 0 }}
+              transition={{ duration: 0.2 }}
+              className="flex items-center space-x-3"
+            >
+              {isSidebarOpen && (
+                <>
+                  <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg flex items-center justify-center">
+                    <Library className="w-5 h-5 text-white" />
+                  </div>
+                  <div>
+                    <h2 className="font-bold text-lg text-gray-800">Admin Panel</h2>
+                    <p className="text-xs text-gray-500">Library Management</p>
+                  </div>
+                </>
+              )}
+            </motion.div>
+            
+            {!isMobile && (
+              <button
+                onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+                className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                title={isSidebarOpen ? "Collapse sidebar" : "Expand sidebar"}
+              >
+                {isSidebarOpen ? (
+                  <ChevronLeft className="w-4 h-4" />
+                ) : (
+                  <ChevronRight className="w-4 h-4" />
+                )}
+              </button>
             )}
-            <button
-              onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-              className="p-2 hover:bg-gray-100 rounded-lg"
-            >
-              {isSidebarOpen ? <X size={24} /> : <Menu size={24} />}
-            </button>
-          </div>
 
-          <nav className="space-y-1 flex-1">
-            <button
-              onClick={() => setActivePage("events")}
-              className={`w-full flex items-center p-3 hover:bg-gray-100 rounded-lg transition-colors ${
-                activePage === "events" ? "bg-blue-50 text-blue-600" : ""
-              }`}
-            >
-              <Calendar size={20} className="min-w-[20px]" />
-              <span
-                className={`ml-3 ${!isSidebarOpen && "lg:hidden xl:inline"}`}
+            {isMobile && (
+              <button
+                onClick={() => setIsSidebarOpen(false)}
+                className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
               >
-                Events
-              </span>
-            </button>
-            <button
-              onClick={() => setActivePage("scholars")}
-              className={`w-full flex items-center p-3 hover:bg-gray-100 rounded-lg transition-colors ${
-                activePage === "scholars" ? "bg-blue-50 text-blue-600" : ""
-              }`}
-            >
-              <Users size={20} className="min-w-[20px]" />
-              <span
-                className={`ml-3 ${!isSidebarOpen && "lg:hidden xl:inline"}`}
-              >
-                Scholars
-              </span>
-            </button>
-            <button
-              onClick={() => setActivePage("books")}
-              className={`w-full flex items-center p-3 hover:bg-gray-100 rounded-lg transition-colors ${
-                activePage === "books" ? "bg-blue-50 text-blue-600" : ""
-              }`}
-            >
-              <BookOpen size={20} className="min-w-[20px]" />
-              <span
-                className={`ml-3 ${!isSidebarOpen && "lg:hidden xl:inline"}`}
-              >
-                Books
-              </span>
-            </button>
-            <button
-              onClick={() => setActivePage("libraries")}
-              className={`w-full flex items-center p-3 hover:bg-gray-100 rounded-lg transition-colors ${
-                activePage === "libraries" ? "bg-blue-50 text-blue-600" : ""
-              }`}
-            >
-              <Library size={20} className="min-w-[20px]" />
-              <span
-                className={`ml-3 ${!isSidebarOpen && "lg:hidden xl:inline"}`}
-              >
-                Libraries
-              </span>
-            </button>
-            <button
-              onClick={() => setActivePage("faq")}
-              className={`w-full flex items-center p-3 hover:bg-gray-100 rounded-lg transition-colors ${
-                activePage === "faq" ? "bg-blue-50 text-blue-600" : ""
-              }`}
-            >
-              <HelpCircle size={20} className="min-w-[20px]" />
-              <span
-                className={`ml-3 ${!isSidebarOpen && "lg:hidden xl:inline"}`}
-              >
-                FAQ
-              </span>
-            </button>
-            <button
-              onClick={() => setActivePage("services")}
-              className={`w-full flex items-center p-3 hover:bg-gray-100 rounded-lg transition-colors ${
-                activePage === "services" ? "bg-blue-50 text-blue-600" : ""
-              }`}
-            >
-              <Cog size={20} className="min-w-[20px]" />
-              <span
-                className={`ml-3 ${!isSidebarOpen && "lg:hidden xl:inline"}`}
-              >
-                Services
-              </span>
-            </button>
-            <button
-              onClick={() => setActivePage("content")}
-              className={`w-full flex items-center p-3 hover:bg-gray-100 rounded-lg transition-colors ${
-                activePage === "content" ? "bg-blue-50 text-blue-600" : ""
-              }`}
-            >
-              <FileText size={20} className="min-w-[20px]" />
-              <span
-                className={`ml-3 ${!isSidebarOpen && "lg:hidden xl:inline"}`}
-              >
-                Content
-              </span>
-            </button>
-          </nav>
-
-          <div className="mt-auto">
-            <button
-              onClick={handleLogout}
-              className="w-full flex items-center p-3 hover:bg-gray-100 rounded-lg transition-colors"
-            >
-              <LogOut size={20} className="min-w-[20px]" />
-              <span
-                className={`ml-3 ${!isSidebarOpen && "lg:hidden xl:inline"}`}
-              >
-                Logout
-              </span>
-            </button>
-            <button className="w-full flex items-center p-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <BookOpen size={20} className="min-w-[20px]" />
-              <a
-                href="/"
-                className={`ml-3 ${!isSidebarOpen && "lg:hidden xl:inline"}`}
-              >
-                Back to landing page
-              </a>
-            </button>
+                <X className="w-5 h-5" />
+              </button>
+            )}
           </div>
         </div>
-      </aside>
+
+        {/* Navigation */}
+        <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
+          {menuItems.map((item) => {
+            const Icon = item.icon;
+            const isActive = activePage === item.key;
+            
+            return (
+              <motion.button
+                key={item.key}
+                onClick={() => {
+                  setActivePage(item.key);
+                  if (isMobile) setIsSidebarOpen(false);
+                }}
+                className={`
+                  w-full flex items-center p-3 rounded-lg transition-all duration-200
+                  ${isActive 
+                    ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg' 
+                    : 'hover:bg-gray-100 text-gray-700'
+                  }
+                `}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                title={!isSidebarOpen ? item.label : undefined}
+              >
+                <Icon className={`w-5 h-5 flex-shrink-0 ${isActive ? 'text-white' : 'text-gray-500'}`} />
+                <AnimatePresence>
+                  {isSidebarOpen && (
+                    <motion.span
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: -10 }}
+                      transition={{ duration: 0.2 }}
+                      className="ml-3 font-medium"
+                    >
+                      {item.label}
+                    </motion.span>
+                  )}
+                </AnimatePresence>
+              </motion.button>
+            );
+          })}
+        </nav>
+
+        {/* Sidebar Footer */}
+        <div className="p-4 border-t border-gray-200 space-y-2">
+          <motion.button
+            onClick={() => window.open('/', '_blank')}
+            className="w-full flex items-center p-3 hover:bg-gray-100 rounded-lg transition-colors text-gray-700"
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            title={!isSidebarOpen ? "Visit Website" : undefined}
+          >
+            <Home className="w-5 h-5 flex-shrink-0 text-gray-500" />
+            <AnimatePresence>
+              {isSidebarOpen && (
+                <motion.span
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -10 }}
+                  transition={{ duration: 0.2 }}
+                  className="ml-3 font-medium"
+                >
+                  Visit Website
+                </motion.span>
+              )}
+            </AnimatePresence>
+          </motion.button>
+
+          <motion.button
+            onClick={handleLogout}
+            className="w-full flex items-center p-3 hover:bg-red-50 hover:text-red-600 rounded-lg transition-colors text-gray-700"
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            title={!isSidebarOpen ? "Logout" : undefined}
+          >
+            <LogOut className="w-5 h-5 flex-shrink-0 text-gray-500" />
+            <AnimatePresence>
+              {isSidebarOpen && (
+                <motion.span
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -10 }}
+                  transition={{ duration: 0.2 }}
+                  className="ml-3 font-medium"
+                >
+                  Logout
+                </motion.span>
+              )}
+            </AnimatePresence>
+          </motion.button>
+        </div>
+      </motion.aside>
 
       {/* Main Content */}
-      <div className="flex-1 w-full lg:overflow-y-auto">
+      <div className="flex-1 flex flex-col min-w-0">
         {/* Header */}
-        <header className="bg-white shadow-sm sticky top-0 z-20">
-          <div className="px-4 py-4 md:py-5">
+        <motion.header
+          initial={{ y: -20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-30"
+        >
+          <div className="px-4 lg:px-6 py-4">
             <div className="flex justify-between items-center">
               <div className="flex items-center space-x-4">
-                <button
-                  className="lg:hidden"
-                  onClick={() => setIsSidebarOpen(true)}
-                >
-                  <Menu size={24} />
-                </button>
-                <h1 className="text-xl md:text-2xl font-bold text-gray-900">
-                  {activePage.charAt(0).toUpperCase() + activePage.slice(1)}{" "}
-                  Management
-                </h1>
+                {isMobile && (
+                  <button
+                    onClick={() => setIsSidebarOpen(true)}
+                    className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                  >
+                    <Menu className="w-5 h-5" />
+                  </button>
+                )}
+                <div>
+                  <h1 className="text-xl lg:text-2xl font-bold text-gray-900">
+                    {menuItems.find(item => item.key === activePage)?.label} Management
+                  </h1>
+                  <p className="text-sm text-gray-500 hidden sm:block">
+                    Manage your library {activePage} efficiently
+                  </p>
+                </div>
               </div>
-              <div className="flex items-center space-x-2">
-                <span className="text-sm text-gray-600 hidden sm:inline">
-                  Welcome, {user?.fname}
-                </span>
-                <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white">
-                  {user?.fname[0].toUpperCase()}
+              
+              <div className="flex items-center space-x-3">
+                <div className="hidden sm:flex items-center space-x-2 text-sm text-gray-600">
+                  <span>Welcome,</span>
+                  <span className="font-medium">{user?.fname}</span>
+                </div>
+                <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-blue-600 rounded-full flex items-center justify-center text-white font-medium shadow-lg">
+                  {user?.fname?.[0]?.toUpperCase() || 'A'}
                 </div>
               </div>
             </div>
           </div>
-        </header>
+        </motion.header>
 
         {/* Content */}
-        <main className="p-4 md:p-6 lg:p-8">
-          <div className="bg-white rounded-xl shadow-sm p-5 md:p-6 border border-gray-100">
-            {renderContent()}
-          </div>
+        <main className="flex-1 p-4 lg:p-6 overflow-auto">
+          <motion.div
+            key={activePage}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3 }}
+            className="bg-white rounded-xl shadow-sm border border-gray-200 min-h-full"
+          >
+            <div className="p-6">
+              {renderContent()}
+            </div>
+          </motion.div>
         </main>
       </div>
     </div>
