@@ -1,6 +1,7 @@
 <?php
 include_once 'connection.php';
 include_once 'cors_headers.php';
+include_once 'image_handler.php';
 
 class UnitLibraries
 {
@@ -156,6 +157,18 @@ class UnitLibraries
   public function addSection($data)
   {
     try {
+      // Compress section image if provided
+      $processedImage = null;
+      if (!empty($data['section_image'])) {
+        $imageHandler = new ImageHandler();
+        try {
+          $processedImage = $imageHandler->compressBase64Image($data['section_image'], 40);
+        } catch (Exception $e) {
+          error_log("Section image compression failed: " . $e->getMessage());
+          $processedImage = $data['section_image'];
+        }
+      }
+
       $stmt = $this->conn->prepare("
                 INSERT INTO sections (
                     section_name,
@@ -172,7 +185,7 @@ class UnitLibraries
       $stmt->execute([
         ':section_name' => $data['section_name'],
         ':section_desc' => $data['section_desc'],
-        ':section_image' => $data['section_image'] ?? null,
+        ':section_image' => $processedImage,
         ':unit_lib_id' => $data['unit_lib_id']
       ]);
       return [
@@ -190,6 +203,18 @@ class UnitLibraries
   public function updateSection($data)
   {
     try {
+      // Compress section image if provided
+      $processedImage = $data['section_image'] ?? null;
+      if (!empty($data['section_image'])) {
+        $imageHandler = new ImageHandler();
+        try {
+          $processedImage = $imageHandler->compressBase64Image($data['section_image'], 40);
+        } catch (Exception $e) {
+          error_log("Section image compression failed: " . $e->getMessage());
+          $processedImage = $data['section_image'];
+        }
+      }
+
       $stmt = $this->conn->prepare("
                 UPDATE sections
                 SET
@@ -202,7 +227,7 @@ class UnitLibraries
         ':id' => $data['id'],
         ':section_name' => $data['section_name'],
         ':section_desc' => $data['section_desc'],
-        ':section_image' => $data['section_image'] ?? null
+        ':section_image' => $processedImage
       ]);
       return [
         'status' => 'success'

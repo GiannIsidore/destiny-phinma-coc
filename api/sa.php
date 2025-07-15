@@ -1,6 +1,7 @@
 <?php
 include_once 'connection.php';
 include_once 'cors_headers.php';
+include_once 'image_handler.php';
 
 // Handle preflight OPTIONS request
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
@@ -71,9 +72,22 @@ class StudentAssistant
         $this->ensureConnection();
         $this->conn->beginTransaction();
 
-        // Insert image into sa_blob
+        // Compress image before storing
+        $imageHandler = new ImageHandler();
+        $compressedImage = null;
+        
+        if (!empty($data['sa_image'])) {
+          try {
+            $compressedImage = $imageHandler->compressBase64Image($data['sa_image'], 40);
+          } catch (Exception $e) {
+            error_log("SA image compression failed: " . $e->getMessage());
+            $compressedImage = $data['sa_image'];
+          }
+        }
+
+        // Insert compressed image into sa_blob
         $stmt = $this->conn->prepare("INSERT INTO sa_blob (sa_image) VALUES (:sa_image)");
-        $imageData = base64_decode($data['sa_image']);
+        $imageData = base64_decode($compressedImage);
         $stmt->bindParam(':sa_image', $imageData, PDO::PARAM_LOB);
         $stmt->execute();
         $imgId = $this->conn->lastInsertId();
@@ -125,9 +139,20 @@ class StudentAssistant
         $this->conn->beginTransaction();
 
         if (isset($data['sa_image'])) {
-          // Update image in sa_blob
+          // Compress image before updating
+          $imageHandler = new ImageHandler();
+          $compressedImage = null;
+          
+          try {
+            $compressedImage = $imageHandler->compressBase64Image($data['sa_image'], 40);
+          } catch (Exception $e) {
+            error_log("SA image compression failed: " . $e->getMessage());
+            $compressedImage = $data['sa_image'];
+          }
+          
+          // Update compressed image in sa_blob
           $stmt = $this->conn->prepare("UPDATE sa_blob SET sa_image = :sa_image WHERE id = :img_id");
-          $imageData = base64_decode($data['sa_image']);
+          $imageData = base64_decode($compressedImage);
           $stmt->bindParam(':sa_image', $imageData, PDO::PARAM_LOB);
           $stmt->bindParam(':img_id', $data['img_id'], PDO::PARAM_INT);
           $stmt->execute();

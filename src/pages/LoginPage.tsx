@@ -117,7 +117,7 @@ export const LoginPage = () => {
               htmlFor="school_id"
               className="block text-sm font-medium text-gray-700 mb-1"
             >
-              School ID
+               ID
             </label>
             <input
               id="school_id"

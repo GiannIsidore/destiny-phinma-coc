@@ -1,6 +1,7 @@
 <?php
 include_once 'connection.php';
 include_once 'cors_headers.php';
+include_once 'image_handler.php';
 
 // Handle preflight OPTIONS request
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
@@ -71,9 +72,22 @@ class HawakKamay
         $this->ensureConnection();
         $this->conn->beginTransaction();
 
-        // Insert image into hk_blob
+        // Compress image before storing
+        $imageHandler = new ImageHandler();
+        $compressedImage = null;
+        
+        if (!empty($data['hk_image'])) {
+          try {
+            $compressedImage = $imageHandler->compressBase64Image($data['hk_image'], 40);
+          } catch (Exception $e) {
+            error_log("HK image compression failed: " . $e->getMessage());
+            $compressedImage = $data['hk_image'];
+          }
+        }
+
+        // Insert compressed image into hk_blob
         $stmt = $this->conn->prepare("INSERT INTO hk_blob (hk_image) VALUES (:hk_image)");
-        $imageData = base64_decode($data['hk_image']);
+        $imageData = base64_decode($compressedImage);
         $stmt->bindParam(':hk_image', $imageData, PDO::PARAM_LOB);
         $stmt->execute();
         $imgId = $this->conn->lastInsertId();
@@ -125,9 +139,20 @@ class HawakKamay
         $this->conn->beginTransaction();
 
         if (isset($data['hk_image'])) {
-          // Update image in hk_blob
+          // Compress image before updating
+          $imageHandler = new ImageHandler();
+          $compressedImage = null;
+          
+          try {
+            $compressedImage = $imageHandler->compressBase64Image($data['hk_image'], 40);
+          } catch (Exception $e) {
+            error_log("HK image compression failed: " . $e->getMessage());
+            $compressedImage = $data['hk_image'];
+          }
+          
+          // Update compressed image in hk_blob
           $stmt = $this->conn->prepare("UPDATE hk_blob SET hk_image = :hk_image WHERE id = :img_id");
-          $imageData = base64_decode($data['hk_image']);
+          $imageData = base64_decode($compressedImage);
           $stmt->bindParam(':hk_image', $imageData, PDO::PARAM_LOB);
           $stmt->bindParam(':img_id', $data['img_id'], PDO::PARAM_INT);
           $stmt->execute();

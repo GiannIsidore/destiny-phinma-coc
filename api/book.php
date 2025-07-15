@@ -1,6 +1,7 @@
 <?php
 include_once 'connection.php';
 include_once 'cors_headers.php';
+include_once 'image_handler.php';
 
 class Book
 {
@@ -76,9 +77,23 @@ class Book
     try {
       $this->conn->beginTransaction();
 
-      // Insert image into book_blob
+      // Compress image before storing
+      $imageHandler = new ImageHandler();
+      $compressedImage = null;
+      
+      if (!empty($data['book_img'])) {
+        try {
+          $compressedImage = $imageHandler->compressBase64Image($data['book_img'], 40);
+        } catch (Exception $e) {
+          error_log("Book image compression failed: " . $e->getMessage());
+          // Use original if compression fails, but this might cause packet size issues
+          $compressedImage = $data['book_img'];
+        }
+      }
+
+      // Insert compressed image into book_blob
       $stmt = $this->conn->prepare("INSERT INTO book_blob (book_img) VALUES (:book_img)");
-      $imageData = base64_decode($data['book_img']);
+      $imageData = base64_decode($compressedImage);
       $stmt->bindParam(':book_img', $imageData, PDO::PARAM_LOB);
       $stmt->execute();
       $imgId = $this->conn->lastInsertId();
@@ -109,9 +124,20 @@ class Book
       $this->conn->beginTransaction();
 
       if (isset($data['book_img'])) {
-        // Update image in book_blob
+        // Compress image before updating
+        $imageHandler = new ImageHandler();
+        $compressedImage = null;
+        
+        try {
+          $compressedImage = $imageHandler->compressBase64Image($data['book_img'], 40);
+        } catch (Exception $e) {
+          error_log("Book image compression failed: " . $e->getMessage());
+          $compressedImage = $data['book_img'];
+        }
+        
+        // Update compressed image in book_blob
         $stmt = $this->conn->prepare("UPDATE book_blob SET book_img = :book_img WHERE id = :img_id");
-        $imageData = base64_decode($data['book_img']);
+        $imageData = base64_decode($compressedImage);
         $stmt->bindParam(':book_img', $imageData, PDO::PARAM_LOB);
         $stmt->bindParam(':img_id', $data['img_id'], PDO::PARAM_INT);
         $stmt->execute();

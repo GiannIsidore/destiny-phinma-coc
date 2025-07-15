@@ -17,6 +17,10 @@ try {
       PDO::ATTR_EMULATE_PREPARES => false
     )
   );
+  
+  // Note: max_allowed_packet is handled by aggressive image compression
+  // If you need to increase it globally, add this to your MySQL config:
+  // max_allowed_packet = 64M
 } catch (PDOException $e) {
   // Ensure no output has been sent before headers
   if (!headers_sent()) {

@@ -1,75 +1,84 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import { API_URL } from "../lib/config"
-import { Badge } from "../components/ui/badge"
-import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card"
-import { Header } from "../components/header"
-import { cn } from "../lib/utils"
-import { Footer } from "../components/footer"
-import { Info } from "lucide-react"
+import { useState, useEffect } from "react";
+import { API_URL } from "../lib/config";
+import { Badge } from "../components/ui/badge";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "../components/ui/card";
+import { Header } from "../components/header";
+import { cn } from "../lib/utils";
+import { Footer } from "../components/footer";
+import { Info } from "lucide-react";
 interface Service {
-  id: number
-  service_name: string
-  service_desc: string
-  service_img: string | null
+  id: number;
+  service_name: string;
+  service_desc: string;
+  service_img: string | null;
+  service_img_url: string | null;
+  image_type: string | null;
 }
 
 const ServicesPage = () => {
-  const [services, setServices] = useState<Service[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
-  const [selectedService, setSelectedService] = useState<Service | null>(null)
-  const [showDetails, setShowDetails] = useState(false)
+  const [services, setServices] = useState<Service[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [selectedService, setSelectedService] = useState<Service | null>(null);
+  const [showDetails, setShowDetails] = useState(false);
 
   useEffect(() => {
     const fetchServices = async () => {
       try {
-        setLoading(true)
-        const response = await fetch(`${API_URL}/services.php?operation=getServices`)
+        setLoading(true);
+        const response = await fetch(
+          `${API_URL}/services.php?operation=getServices`,
+        );
 
         if (!response.ok) {
-          throw new Error("Failed to fetch services")
+          throw new Error("Failed to fetch services");
         }
 
-        const data = await response.json()
+        const data = await response.json();
 
         if (data.status === "success") {
-          setServices(data.data)
+          setServices(data.data);
         } else {
-          throw new Error(data.message || "Failed to load services")
+          throw new Error(data.message || "Failed to load services");
         }
       } catch (err) {
-        setError(err instanceof Error ? err.message : "An unknown error occurred")
+        setError(
+          err instanceof Error ? err.message : "An unknown error occurred",
+        );
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
-    }
+    };
 
-    fetchServices()
-  }, [])
+    fetchServices();
+  }, []);
 
   const handleServiceClick = (service: Service) => {
     if (selectedService?.id === service.id) {
       // Toggle off if clicking the same service
-      setSelectedService(null)
-      setShowDetails(false)
+      setSelectedService(null);
+      setShowDetails(false);
     } else {
       // Select new service and show details
-      setSelectedService(service)
-      setShowDetails(true)
+      setSelectedService(service);
+      setShowDetails(true);
 
       // Scroll to details section after a short delay to allow rendering
       setTimeout(() => {
-        const detailsSection = document.getElementById("service-details")
+        const detailsSection = document.getElementById("service-details");
         if (detailsSection) {
-          detailsSection.scrollIntoView({ behavior: "smooth" })
+          detailsSection.scrollIntoView({ behavior: "smooth" });
         }
-      }, 100)
+      }, 100);
     }
-  }
-
-
+  };
 
   if (loading) {
     return (
@@ -83,11 +92,15 @@ const ServicesPage = () => {
           </span>
         </div>
       </div>
-    )
+    );
   }
 
   if (error) {
-    return <div className="container mx-auto p-8 text-center text-red-500">{error}</div>
+    return (
+      <div className="container mx-auto p-8 text-center text-red-500">
+        {error}
+      </div>
+    );
   }
 
   return (
@@ -97,14 +110,21 @@ const ServicesPage = () => {
       <div className="mt-[15vh] mb-[15vh]">
         <div className="text-left mb-8">
           <h1 className="text-3xl font-bold mb-4">Our Services</h1>
-          <p className="text-gray-600 max-w-2xl ">Click on a service to learn more about what we offer</p>
+          <p className="text-gray-600 max-w-2xl ">
+            Click on a service to learn more about what we offer
+          </p>
         </div>
 
-        <div id="services-list" className="flex flex-wrap justify-start gap-3 md:gap-4 mb-12">
+        <div
+          id="services-list"
+          className="flex flex-wrap justify-start gap-3 md:gap-4 mb-12"
+        >
           {services.map((service) => (
             <Badge
               key={service.id}
-              variant={selectedService?.id === service.id ? "default" : "outline"}
+              variant={
+                selectedService?.id === service.id ? "default" : "outline"
+              }
               className={cn(
                 "px-2 py-1 text-base md:text-sm cursor-pointer transition-all duration-300 hover:scale-105",
                 selectedService?.id === service.id
@@ -114,7 +134,9 @@ const ServicesPage = () => {
               onClick={() => handleServiceClick(service)}
             >
               {service.service_name}
-              {selectedService?.id === service.id && <Info className="ml-2 h-4 w-4 inline" />}
+              {selectedService?.id === service.id && (
+                <Info className="ml-2 h-4 w-4 inline" />
+              )}
             </Badge>
           ))}
         </div>
@@ -127,7 +149,9 @@ const ServicesPage = () => {
             <Card className="border-2 border-primary/20 shadow-lg">
               <CardHeader className="bg-muted/50">
                 <div className="flex justify-between items-center">
-                  <CardTitle className="text-2xl text-primary">{selectedService.service_name}</CardTitle>
+                  <CardTitle className="text-2xl text-primary">
+                    {selectedService.service_name}
+                  </CardTitle>
                   {/* <Button
                     variant="ghost"
                     size="sm"
@@ -140,16 +164,23 @@ const ServicesPage = () => {
                 </div>
               </CardHeader>
               <CardContent className="pt-6">
-                {selectedService.service_img && (
+                {(selectedService.service_img_url ||
+                  selectedService.service_img) && (
                   <div className="mb-6 overflow-hidden rounded-lg">
                     <img
-                      src={`data:image/jpeg;base64,${selectedService.service_img}`}
+                      src={
+                        selectedService.service_img_url ||
+                        `data:image/jpeg;base64,${selectedService.service_img}`
+                      }
                       alt={selectedService.service_name}
                       className="w-full h-auto max-h-96 object-contain rounded-lg transition-transform hover:scale-[1.02] duration-300"
                     />
                   </div>
                 )}
-                <div className="prose max-w-none text-foreground" style={{ whiteSpace: "pre-line" }}>
+                <div
+                  className="prose max-w-none text-foreground"
+                  style={{ whiteSpace: "pre-line" }}
+                >
                   {selectedService.service_desc}
                 </div>
               </CardContent>
@@ -166,7 +197,7 @@ const ServicesPage = () => {
       </div>
       <Footer />
     </div>
-  )
-}
+  );
+};
 
-export default ServicesPage
+export default ServicesPage;

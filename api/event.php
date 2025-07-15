@@ -1,6 +1,7 @@
 <?php
 include_once 'connection.php';
 include_once 'cors_headers.php';
+include_once 'image_handler.php';
 
 class Event
 {
@@ -46,9 +47,23 @@ class Event
     try {
       $this->conn->beginTransaction();
 
-      // Insert image into event_blob
+      // Compress image before storing
+      $imageHandler = new ImageHandler();
+      $compressedImage = null;
+      
+      if (!empty($data['event_image'])) {
+        try {
+          $compressedImage = $imageHandler->compressBase64Image($data['event_image'], 40);
+        } catch (Exception $e) {
+          error_log("Event image compression failed: " . $e->getMessage());
+          // Use original if compression fails, but this might cause packet size issues
+          $compressedImage = $data['event_image'];
+        }
+      }
+
+      // Insert compressed image into event_blob
       $stmt = $this->conn->prepare("INSERT INTO event_blob (event_image) VALUES (:event_image)");
-      $imageData = base64_decode($data['event_image']);
+      $imageData = base64_decode($compressedImage);
       $stmt->bindParam(':event_image', $imageData, PDO::PARAM_LOB);
       $stmt->execute();
       $imgId = $this->conn->lastInsertId();
@@ -78,9 +93,20 @@ class Event
       $this->conn->beginTransaction();
 
       if (isset($data['event_image'])) {
-        // Update image in event_blob
+        // Compress image before updating
+        $imageHandler = new ImageHandler();
+        $compressedImage = null;
+        
+        try {
+          $compressedImage = $imageHandler->compressBase64Image($data['event_image'], 40);
+        } catch (Exception $e) {
+          error_log("Event image compression failed: " . $e->getMessage());
+          $compressedImage = $data['event_image'];
+        }
+        
+        // Update compressed image in event_blob
         $stmt = $this->conn->prepare("UPDATE event_blob SET event_image = :event_image WHERE id = :img_id");
-        $imageData = base64_decode($data['event_image']);
+        $imageData = base64_decode($compressedImage);
         $stmt->bindParam(':event_image', $imageData, PDO::PARAM_LOB);
         $stmt->bindParam(':img_id', $data['img_id'], PDO::PARAM_INT);
         $stmt->execute();

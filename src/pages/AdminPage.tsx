@@ -3,15 +3,27 @@ import FeaturedBooks from "./FeaturedBooks";
 import FeaturedEvents from "./FeaturedEvents";
 import AdminFaqPage from "./AdminFaqPage";
 import AdminLibraries from "./AdminLibraries";
+import AdminContent from "./AdminContent";
 import { useState, useEffect } from "react";
 import { sessionManager } from "../utils/sessionManager";
-import { LogOut, Menu, BookOpen, Users, Calendar, HelpCircle, X, Library, Cog } from "lucide-react";
+import {
+  LogOut,
+  Menu,
+  BookOpen,
+  Users,
+  Calendar,
+  HelpCircle,
+  X,
+  Library,
+  Cog,
+  FileText,
+} from "lucide-react";
 import AdminServicesPage from "./AdminServices";
 
 const AdminPage = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
-  const [activePage, setActivePage] = useState('events');
+  const [activePage, setActivePage] = useState("events");
   const user = sessionManager.getSession();
 
   useEffect(() => {
@@ -36,18 +48,20 @@ const AdminPage = () => {
 
   const renderContent = () => {
     switch (activePage) {
-      case 'events':
+      case "events":
         return <FeaturedEvents />;
-      case 'scholars':
+      case "scholars":
         return <ScholarsAdmin />;
-      case 'books':
+      case "books":
         return <FeaturedBooks />;
-      case 'faq':
+      case "faq":
         return <AdminFaqPage />;
-      case 'libraries':
+      case "libraries":
         return <AdminLibraries />;
-      case 'services':
+      case "services":
         return <AdminServicesPage />;
+      case "content":
+        return <AdminContent />;
       default:
         return <FeaturedEvents />;
     }
@@ -89,69 +103,94 @@ const AdminPage = () => {
 
           <nav className="space-y-1 flex-1">
             <button
-              onClick={() => setActivePage('events')}
+              onClick={() => setActivePage("events")}
               className={`w-full flex items-center p-3 hover:bg-gray-100 rounded-lg transition-colors ${
-                activePage === 'events' ? 'bg-blue-50 text-blue-600' : ''
+                activePage === "events" ? "bg-blue-50 text-blue-600" : ""
               }`}
             >
               <Calendar size={20} className="min-w-[20px]" />
-              <span className={`ml-3 ${!isSidebarOpen && "lg:hidden xl:inline"}`}>
+              <span
+                className={`ml-3 ${!isSidebarOpen && "lg:hidden xl:inline"}`}
+              >
                 Events
               </span>
             </button>
             <button
-              onClick={() => setActivePage('scholars')}
+              onClick={() => setActivePage("scholars")}
               className={`w-full flex items-center p-3 hover:bg-gray-100 rounded-lg transition-colors ${
-                activePage === 'scholars' ? 'bg-blue-50 text-blue-600' : ''
+                activePage === "scholars" ? "bg-blue-50 text-blue-600" : ""
               }`}
             >
               <Users size={20} className="min-w-[20px]" />
-              <span className={`ml-3 ${!isSidebarOpen && "lg:hidden xl:inline"}`}>
+              <span
+                className={`ml-3 ${!isSidebarOpen && "lg:hidden xl:inline"}`}
+              >
                 Scholars
               </span>
             </button>
             <button
-              onClick={() => setActivePage('books')}
+              onClick={() => setActivePage("books")}
               className={`w-full flex items-center p-3 hover:bg-gray-100 rounded-lg transition-colors ${
-                activePage === 'books' ? 'bg-blue-50 text-blue-600' : ''
+                activePage === "books" ? "bg-blue-50 text-blue-600" : ""
               }`}
             >
               <BookOpen size={20} className="min-w-[20px]" />
-              <span className={`ml-3 ${!isSidebarOpen && "lg:hidden xl:inline"}`}>
+              <span
+                className={`ml-3 ${!isSidebarOpen && "lg:hidden xl:inline"}`}
+              >
                 Books
               </span>
             </button>
             <button
-              onClick={() => setActivePage('libraries')}
+              onClick={() => setActivePage("libraries")}
               className={`w-full flex items-center p-3 hover:bg-gray-100 rounded-lg transition-colors ${
-                activePage === 'libraries' ? 'bg-blue-50 text-blue-600' : ''
+                activePage === "libraries" ? "bg-blue-50 text-blue-600" : ""
               }`}
             >
               <Library size={20} className="min-w-[20px]" />
-              <span className={`ml-3 ${!isSidebarOpen && "lg:hidden xl:inline"}`}>
+              <span
+                className={`ml-3 ${!isSidebarOpen && "lg:hidden xl:inline"}`}
+              >
                 Libraries
               </span>
             </button>
             <button
-              onClick={() => setActivePage('faq')}
+              onClick={() => setActivePage("faq")}
               className={`w-full flex items-center p-3 hover:bg-gray-100 rounded-lg transition-colors ${
-                activePage === 'faq' ? 'bg-blue-50 text-blue-600' : ''
+                activePage === "faq" ? "bg-blue-50 text-blue-600" : ""
               }`}
             >
               <HelpCircle size={20} className="min-w-[20px]" />
-              <span className={`ml-3 ${!isSidebarOpen && "lg:hidden xl:inline"}`}>
+              <span
+                className={`ml-3 ${!isSidebarOpen && "lg:hidden xl:inline"}`}
+              >
                 FAQ
               </span>
             </button>
             <button
-              onClick={() => setActivePage('services')}
+              onClick={() => setActivePage("services")}
               className={`w-full flex items-center p-3 hover:bg-gray-100 rounded-lg transition-colors ${
-                activePage === 'services' ? 'bg-blue-50 text-blue-600' : ''
+                activePage === "services" ? "bg-blue-50 text-blue-600" : ""
               }`}
             >
               <Cog size={20} className="min-w-[20px]" />
-              <span className={`ml-3 ${!isSidebarOpen && "lg:hidden xl:inline"}`}>
-               Services
+              <span
+                className={`ml-3 ${!isSidebarOpen && "lg:hidden xl:inline"}`}
+              >
+                Services
+              </span>
+            </button>
+            <button
+              onClick={() => setActivePage("content")}
+              className={`w-full flex items-center p-3 hover:bg-gray-100 rounded-lg transition-colors ${
+                activePage === "content" ? "bg-blue-50 text-blue-600" : ""
+              }`}
+            >
+              <FileText size={20} className="min-w-[20px]" />
+              <span
+                className={`ml-3 ${!isSidebarOpen && "lg:hidden xl:inline"}`}
+              >
+                Content
               </span>
             </button>
           </nav>
@@ -162,15 +201,18 @@ const AdminPage = () => {
               className="w-full flex items-center p-3 hover:bg-gray-100 rounded-lg transition-colors"
             >
               <LogOut size={20} className="min-w-[20px]" />
-              <span className={`ml-3 ${!isSidebarOpen && "lg:hidden xl:inline"}`}>
+              <span
+                className={`ml-3 ${!isSidebarOpen && "lg:hidden xl:inline"}`}
+              >
                 Logout
               </span>
             </button>
-            <button
-              className="w-full flex items-center p-3 hover:bg-gray-100 rounded-lg transition-colors"
-            >
+            <button className="w-full flex items-center p-3 hover:bg-gray-100 rounded-lg transition-colors">
               <BookOpen size={20} className="min-w-[20px]" />
-              <a href="/" className={`ml-3 ${!isSidebarOpen && "lg:hidden xl:inline"}`}>
+              <a
+                href="/"
+                className={`ml-3 ${!isSidebarOpen && "lg:hidden xl:inline"}`}
+              >
                 Back to landing page
               </a>
             </button>
@@ -192,7 +234,8 @@ const AdminPage = () => {
                   <Menu size={24} />
                 </button>
                 <h1 className="text-xl md:text-2xl font-bold text-gray-900">
-                  {activePage.charAt(0).toUpperCase() + activePage.slice(1)} Management
+                  {activePage.charAt(0).toUpperCase() + activePage.slice(1)}{" "}
+                  Management
                 </h1>
               </div>
               <div className="flex items-center space-x-2">
