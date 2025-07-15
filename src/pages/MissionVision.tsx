@@ -17,6 +17,19 @@ const MissionVision = () => {
   const [goals, setGoals] = useState<ContentData | null>(null);
   const [loading, setLoading] = useState(true);
 
+  const renderMarkdown = (text: string) => {
+    return text
+      .replace(/^### (.*$)/gim, '<h3 class="text-lg font-semibold mt-4 mb-2">$1</h3>')
+      .replace(/^## (.*$)/gim, '<h2 class="text-xl font-semibold mt-6 mb-3">$1</h2>')
+      .replace(/^# (.*$)/gim, '<h1 class="text-2xl font-bold mt-8 mb-4">$1</h1>')
+      .replace(/\*\*(.*)\*\*/gim, '<strong>$1</strong>')
+      .replace(/\*(.*)\*/gim, '<em>$1</em>')
+      .replace(/^- (.*$)/gim, '<li class="ml-4">$1</li>')
+      .replace(/^> (.*$)/gim, '<blockquote class="border-l-4 border-gray-300 pl-4 italic">$1</blockquote>')
+      .replace(/\[([^\]]+)\]\(([^)]+)\)/gim, '<a href="$2" class="text-blue-600 underline">$1</a>')
+      .replace(/\n/gim, '<br>');
+  };
+
   useEffect(() => {
     const fetchContent = async () => {
       try {
@@ -106,23 +119,32 @@ const MissionVision = () => {
 
             <div className="mt-12 bg-white p-8 rounded-lg shadow-md">
               <h2 className="text-2xl font-bold mb-4 text-primary">
-                Our Goals
+                {goals?.title || "Our Goals"}
               </h2>
-              <ul className="list-disc pl-6 space-y-3 text-lg">
-                <li>
-                  To build, organize, preserve and make accessible the library's
-                  collection.
-                </li>
-                <li>
-                  To provide relevant information resources in various formats
-                  to support the curriculum.
-                </li>
-                <li>To develop information literacy skills among users.</li>
-                <li>To extend library services to the community.</li>
-                <li>
-                  To establish linkages with other libraries and institutions.
-                </li>
-              </ul>
+              {goals?.content ? (
+                <div
+                  className="prose max-w-none text-lg"
+                  dangerouslySetInnerHTML={{
+                    __html: renderMarkdown(goals.content),
+                  }}
+                />
+              ) : (
+                <ul className="list-disc pl-6 space-y-3 text-lg">
+                  <li>
+                    To build, organize, preserve and make accessible the library's
+                    collection.
+                  </li>
+                  <li>
+                    To provide relevant information resources in various formats
+                    to support the curriculum.
+                  </li>
+                  <li>To develop information literacy skills among users.</li>
+                  <li>To extend library services to the community.</li>
+                  <li>
+                    To establish linkages with other libraries and institutions.
+                  </li>
+                </ul>
+              )}
             </div>
           </motion.div>
         </div>
