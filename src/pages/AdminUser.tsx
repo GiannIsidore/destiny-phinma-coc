@@ -9,7 +9,6 @@ import { Card, CardHeader, CardTitle, CardContent } from "../components/ui/card"
 export interface UserRow extends UserData {
   id: number;
   status: number;
-  school_id: string;
 }
 
 const initialForm: UserRow & { password?: string } = {
@@ -140,9 +139,9 @@ const AdminUserManagement: React.FC = () => {
   };
 
   const filteredUsers = users.filter((u) =>
-    (u.school_id || '').toLowerCase().includes(search.toLowerCase()) ||
-    (u.fname || '').toLowerCase().includes(search.toLowerCase()) ||
-    (u.lname || '').toLowerCase().includes(search.toLowerCase())
+    u.school_id.toLowerCase().includes(search.toLowerCase()) ||
+    u.fname.toLowerCase().includes(search.toLowerCase()) ||
+    u.lname.toLowerCase().includes(search.toLowerCase())
   );
 
   return (
@@ -167,8 +166,9 @@ const AdminUserManagement: React.FC = () => {
               </DialogHeader>
               <form onSubmit={e => { e.preventDefault(); handleAdd(); }}>
                 <div className="grid gap-3 mb-4">
-<Label>School ID*</Label>
-                   <Input name="school_id" value={form.school_id} onChange={handleInput} required />                  <Label>First Name*</Label>
+                  <Label>School ID*</Label>
+                  <Input name="school_id" value={form.school_id} onChange={handleInput} required />
+                  <Label>First Name*</Label>
                   <Input name="fname" value={form.fname} onChange={handleInput} required />
                   <Label>Last Name*</Label>
                   <Input name="lname" value={form.lname} onChange={handleInput} required />
@@ -232,7 +232,7 @@ const AdminUserManagement: React.FC = () => {
             </DialogHeader>
             <form onSubmit={e => { e.preventDefault(); handleUpdate(); }}>
               <div className="grid gap-3 mb-4">
-                <Label>User ID</Label>
+                <Label>School ID</Label>
                 <Input name="school_id" value={form.school_id} disabled />
                 <Label>First Name*</Label>
                 <Input name="fname" value={form.fname} onChange={handleInput} required />
