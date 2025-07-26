@@ -37,6 +37,8 @@ const AdminContent = () => {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState<string | null>(null);
   const [previewMode, setPreviewMode] = useState<Record<string, boolean>>({});
+  const [success, setSuccess] = useState<string>("");
+  const [error, setError] = useState<string>("");
 
   // Markdown helper functions
   const insertMarkdown = (
@@ -131,6 +133,8 @@ const AdminContent = () => {
     if (!content) return;
 
     setSaving(type);
+    setSuccess("");
+    setError("");
     try {
       const response = await fetch(`${API_URL}/content.php`, {
         method: "POST",
@@ -146,13 +150,13 @@ const AdminContent = () => {
 
       const data = await response.json();
       if (data.status === "success") {
-        // Refresh the content to get updated timestamp
+        setSuccess("Content saved successfully.");
         fetchContents();
       } else {
-        console.error("Error saving content:", data.message);
+        setError(data.message || "Failed to save content.");
       }
     } catch (error) {
-      console.error("Error saving content:", error);
+      setError("Error saving content.");
     } finally {
       setSaving(null);
     }
@@ -226,6 +230,8 @@ const AdminContent = () => {
         <p className="text-gray-600 mt-2">
           Manage mission, vision, goals, and library policies
         </p>
+        {success && <div className="text-green-600 mt-4">{success}</div>}
+        {error && <div className="text-red-500 mt-4">{error}</div>}
       </div>
 
       <Tabs defaultValue="mission" className="space-y-6">

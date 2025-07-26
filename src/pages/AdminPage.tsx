@@ -4,6 +4,7 @@ import FeaturedEvents from "./FeaturedEvents";
 import AdminFaqPage from "./AdminFaqPage";
 import AdminLibraries from "./AdminLibraries";
 import AdminContent from "./AdminContent";
+import AdminUserManagement from "./AdminUser";
 import { useState, useEffect } from "react";
 import { sessionManager } from "../utils/sessionManager";
 import {
@@ -55,6 +56,8 @@ const AdminPage = () => {
         return <ScholarsAdmin />;
       case 'books':
         return <FeaturedBooks />;
+      case 'users':
+        return <AdminUserManagement />;
       case 'faq':
         return <AdminFaqPage />;
       case 'libraries':
@@ -72,6 +75,7 @@ const AdminPage = () => {
     { key: 'events', label: 'Events', icon: Calendar },
     { key: 'scholars', label: 'Scholars', icon: Users },
     { key: 'books', label: 'Books', icon: BookOpen },
+    { key: 'users', label: 'Users', icon: Users },
     { key: 'faq', label: 'FAQ', icon: HelpCircle },
     { key: 'libraries', label: 'Libraries', icon: Library },
     { key: 'services', label: 'Services', icon: Cog },

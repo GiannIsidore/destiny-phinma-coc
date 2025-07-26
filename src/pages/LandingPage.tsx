@@ -1,11 +1,11 @@
 import { motion } from 'framer-motion';
-import { ParallaxHero } from "../components/parallax-hero";
 import { MainContent } from "../components/main-content";
 import { BookCarousel } from "../components/book-carousel";
 import { Footer } from "../components/footer";
 import ProfileLayoutV2 from "../components/important-peps";
 import  EventBento  from "../components/event-bento";
 import { Header } from '../components/header';
+import { ParallaxHero } from '../components/parallax-hero';
 
 const animationVariants = {
   initial: { opacity: 0, y: 20 },

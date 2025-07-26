@@ -12,8 +12,7 @@ import { BASE_URL } from "../lib/config";
 export const LoginPage = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    school_id: "",
-    password: "",
+user_id: "",    password: "",
   });
   const [loading, setLoading] = useState(false);
 
@@ -124,7 +123,7 @@ export const LoginPage = () => {
               type="text"
               value={formData.school_id}
               onChange={(e) =>
-                setFormData({ ...formData, school_id: e.target.value })
+                setFormData({ ...formData, user_id: e.target.value })
               }
               className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#0d542b] focus:border-[#0d542b] transition-colors"
               required

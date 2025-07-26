@@ -30,6 +30,7 @@ const AdminServicesPage = () => {
   const [services, setServices] = useState<Service[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedService, setSelectedService] = useState<Service | null>(null);
+  const [dialogOpen, setDialogOpen] = useState(false);
 
   // Form states
   const [serviceName, setServiceName] = useState("");
@@ -283,9 +284,9 @@ const AdminServicesPage = () => {
     <div className="container mx-auto p-8">
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-3xl font-bold">Manage Services</h1>
-        <Dialog>
+        <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
           <DialogTrigger asChild>
-            <Button onClick={() => resetForm()}>Add New Service</Button>
+            <Button onClick={() => { resetForm(); setDialogOpen(true); }}>Add New Service</Button>
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>
@@ -429,7 +430,7 @@ const AdminServicesPage = () => {
                       <Button
                         variant="outline"
                         size="sm"
-                        onClick={() => handleEdit(service)}
+                        onClick={() => { handleEdit(service); setDialogOpen(true); }}
                       >
                         <Edit className="h-4 w-4 mr-1" />
                         Edit

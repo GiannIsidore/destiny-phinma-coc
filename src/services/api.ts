@@ -237,4 +237,12 @@ export const hkAPI = {
   deleteHK: (id: number) => api.post('hk.php', { operation: 'deleteHK', json: { id } }),
 };
 
+// User management endpoints
+export const userAPI = {
+  getUsers: () => api.post('user.php', { operation: 'getUsers' }),
+  getUser: (id: number) => api.post('user.php', { operation: 'getUser', json: { id } }),
+  updateUser: (data: UserData & { id: number, status: number }) => api.post('user.php', { operation: 'updateUser', json: data }),
+  deleteUser: (id: number) => api.post('user.php', { operation: 'deleteUser', json: { id } }),
+};
+
 export default api;
