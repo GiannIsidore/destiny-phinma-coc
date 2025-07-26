@@ -436,14 +436,7 @@ const AdminLibraries = () => {
                     </CardTitle>
                     <CardDescription className="line-clamp-2">{library.library_description}</CardDescription>
                   </CardHeader>
-                  <CardContent>
-                    <div className="flex items-center gap-2 text-sm text-gray-500 mb-4">
-                      <Layers className="h-4 w-4" />
-                      <span>
-                        {library.sections?.length || 0} {library.sections?.length === 1 ? "Section" : "Sections"}
-                      </span>
-                    </div>
-                  </CardContent>
+                  
                   <CardFooter className="flex justify-between gap-2 pt-2 border-t bg-gray-50">
                     <Button
                       variant="ghost"
