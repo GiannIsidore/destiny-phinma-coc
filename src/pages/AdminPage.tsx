@@ -34,13 +34,7 @@ const AdminPage = () => {
     const checkMobile = () => {
       const mobile = window.innerWidth < 1024;
       setIsMobile(mobile);
-      // On mobile, start with sidebar closed
-      if (mobile) {
-        setIsSidebarOpen(false);
-      } else {
-        // On desktop, start with sidebar open
-        setIsSidebarOpen(true);
-      }
+      setIsSidebarOpen(!mobile);
     };
 
     checkMobile();
@@ -84,10 +78,8 @@ const AdminPage = () => {
     { key: 'content', label: 'Content', icon: FileText },
   ];
 
-  const sidebarWidth = isSidebarOpen ? 'w-72' : 'w-16';
-
   return (
-    <div className="flex min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+    <div className="flex h-screen bg-gradient-to-br from-gray-50 to-gray-100 overflow-hidden">
       {/* Mobile Overlay */}
       <AnimatePresence>
         {isMobile && isSidebarOpen && (
@@ -111,7 +103,7 @@ const AdminPage = () => {
         transition={{ duration: 0.3, ease: "easeInOut" }}
         className={`
           ${isMobile ? 'fixed' : 'relative'}
-          bg-white shadow-xl z-50 h-screen flex flex-col overflow-hidden
+          bg-white shadow-xl z-50 h-full flex flex-col overflow-hidden
           border-r border-gray-200
         `}
       >
@@ -136,22 +128,15 @@ const AdminPage = () => {
                 </>
               )}
             </motion.div>
-            
-            {!isMobile && (
+
+            {!isMobile ? (
               <button
                 onClick={() => setIsSidebarOpen(!isSidebarOpen)}
                 className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
-                title={isSidebarOpen ? "Collapse sidebar" : "Expand sidebar"}
               >
-                {isSidebarOpen ? (
-                  <ChevronLeft className="w-4 h-4" />
-                ) : (
-                  <ChevronRight className="w-4 h-4" />
-                )}
+                {isSidebarOpen ? <ChevronLeft className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
               </button>
-            )}
-
-            {isMobile && (
+            ) : (
               <button
                 onClick={() => setIsSidebarOpen(false)}
                 className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
@@ -163,11 +148,10 @@ const AdminPage = () => {
         </div>
 
         {/* Navigation */}
-        <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
+        <nav className="flex-1 p-4 space-y-2">
           {menuItems.map((item) => {
             const Icon = item.icon;
             const isActive = activePage === item.key;
-            
             return (
               <motion.button
                 key={item.key}
@@ -205,7 +189,7 @@ const AdminPage = () => {
           })}
         </nav>
 
-        {/* Sidebar Footer */}
+        {/* Footer */}
         <div className="p-4 border-t border-gray-200 space-y-2">
           <motion.button
             onClick={() => window.open('/', '_blank')}
@@ -256,8 +240,7 @@ const AdminPage = () => {
       </motion.aside>
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col min-w-0">
-        {/* Header */}
+      <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
         <motion.header
           initial={{ y: -20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
@@ -283,7 +266,7 @@ const AdminPage = () => {
                   </p>
                 </div>
               </div>
-              
+
               <div className="flex items-center space-x-3">
                 <div className="hidden sm:flex items-center space-x-2 text-sm text-gray-600">
                   <span>Welcome,</span>
@@ -297,8 +280,7 @@ const AdminPage = () => {
           </div>
         </motion.header>
 
-        {/* Content */}
-        <main className="flex-1 p-4 lg:p-6 overflow-auto">
+        <main className="flex-1 overflow-y-auto p-4 lg:p-6">
           <motion.div
             key={activePage}
             initial={{ opacity: 0, y: 20 }}
