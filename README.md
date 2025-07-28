@@ -74,7 +74,7 @@ src/
 - `event.php` — Event management
 - `faq.php` — FAQ
 - `sa.php` — Student assistants
-- `hk.php` — Housekeepers
+- `hk.php` — Hawak Kamay
 - `services.php` — Library services
 - `unit_libraries.php` — Unit libraries and sections
 
